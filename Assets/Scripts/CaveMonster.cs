@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEditor;
 using CustomLibrary.Collisions;
 
 public class CaveMonster : MonoBehaviour {
@@ -144,8 +142,7 @@ public class CaveMonster : MonoBehaviour {
     }
 
     void JumpRandomizer() {
-        //Dit is een comment om de git client uit te testen!
-        float randomFloat = Random.Range(0, 400);
+        float randomFloat = Random.Range(0, 600);
         if (randomFloat < 3) {
             Direction = MoveDirection.jumpLeft;
         }
