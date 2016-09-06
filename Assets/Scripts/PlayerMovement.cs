@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour {
     void Update() {
         //Naar links bewegen
         if (InputManager.Left) {
-            if (!GoodCollisions.CheckSide(transform.position, Vector2.left, Vector2.up, 0.6f,"Solid")) { //Links vrij
+            if (!GoodCollisions.CheckSide(gameObject, Vector2.left,  0.1f, "Solid")) { //Links vrij
                 transform.position += Vector3.left * moveSpeed * Time.deltaTime;
                 spriteRenderer.flipX = false; //Kijk naar links
                 lastDirection = Vector2.left; //onthoud waar we het laatst naartoe hebben gekeken
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour {
         }
         //Naar rechts bewegen
         if (InputManager.Right) {
-            if (!GoodCollisions.CheckSide(transform.position, Vector2.right, Vector2.up, 0.6f, "Solid")) { //Rechts vrij
+            if (!GoodCollisions.CheckSide(gameObject, Vector2.right,  0.1f, "Solid")) { //Rechts vrij
                 transform.position += Vector3.right * moveSpeed * Time.deltaTime;
                 spriteRenderer.flipX = true; //Kijk naar rechts
                 lastDirection = Vector2.right; //onthoud waar we het laatst naartoe hebben gekeken
@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         //Controleren of we op de grond staan
-        onGround = GoodCollisions.CheckSide(transform.position, Vector2.down, Vector2.left, 0.6f, "Solid");
+        onGround = GoodCollisions.CheckSide(gameObject, Vector2.down, 0.1f, -261);
 
         //Springen
         if (InputManager.Jump && onGround) {
@@ -54,5 +54,6 @@ public class PlayerMovement : MonoBehaviour {
             Instantiate(bubblePrefab);
         }
 
+        
     }
 }

@@ -14,7 +14,5 @@ public class CameraBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //transform.position = Vector2.Lerp(transform.position, player.position, Time.deltaTime * ease);
-
-        //Hallo daar!!!!!!!
 	}
 }
