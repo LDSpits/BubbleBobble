@@ -8,6 +8,12 @@
 sysinfo.txt
 *.stackdump
 
+####################
+Google drive garbage
+####################
+
+desktop.ini
+desktop.ini.meta
 
 #################
 ## Visual Studio
