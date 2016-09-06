@@ -1,9 +1,12 @@
-#################
-#Unity
-#################
+# =============== #
+# Unity generated #
+# =============== #
 
-UnityLockfile
-UnityTempFile-*
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+sysinfo.txt
+*.stackdump
 
 
 #################
