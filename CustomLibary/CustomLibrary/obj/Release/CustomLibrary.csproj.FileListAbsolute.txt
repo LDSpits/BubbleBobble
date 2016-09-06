@@ -1,0 +1,19 @@
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.dll
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.pdb
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\bin\Release\UnityEngine.dll
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\bin\Release\UnityEngine.xml
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.csprojResolveAssemblyReference.cache
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.dll
+c:\users\xvvv\documents\visual studio 2015\Projects\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.pdb
+I:\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.dll
+I:\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.pdb
+I:\CustomLibrary\CustomLibrary\bin\Release\UnityEngine.xml
+I:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.csprojResolveAssemblyReference.cache
+I:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.dll
+I:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.pdb
+F:\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.dll
+F:\CustomLibrary\CustomLibrary\bin\Release\CustomLibrary.pdb
+F:\CustomLibrary\CustomLibrary\bin\Release\UnityEngine.xml
+F:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.csprojResolveAssemblyReference.cache
+F:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.dll
+F:\CustomLibrary\CustomLibrary\obj\Release\CustomLibrary.pdb
