@@ -144,6 +144,7 @@ public class CaveMonster : MonoBehaviour {
     }
 
     void JumpRandomizer() {
+        //Dit is een comment om de git client uit te testen!
         float randomFloat = Random.Range(0, 400);
         if (randomFloat < 3) {
             Direction = MoveDirection.jumpLeft;
