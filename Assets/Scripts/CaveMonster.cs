@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using CustomLibrary.Collisions;
 
 public class CaveMonster : MonoBehaviour {
 
@@ -21,16 +22,24 @@ public class CaveMonster : MonoBehaviour {
             return direction;
         }
         set{
-            if (value == MoveDirection.left) {
-                sr.flipX = false;
-            }
-            else if (value == MoveDirection.right) {
-                sr.flipX = true;
-            }
-            else if(value == MoveDirection.randomHorizontal) {
-                direction = (MoveDirection)Random.Range(1f, 3f);
-                sr.flipX = direction != (MoveDirection)1;
-                return;
+            switch (value) {
+                case MoveDirection.left: sr.flipX = false; break;
+                case MoveDirection.right: sr.flipX = true; break;
+                case MoveDirection.randomHorizontal:
+                    direction = (MoveDirection)Random.Range(1f, 3f);
+
+                    if (direction == MoveDirection.left)
+                        sr.flipX = false;
+                    else if(direction == MoveDirection.right)
+                        sr.flipX = true;
+                    break;
+                case MoveDirection.jumpLeft: sr.flipX = false; goto case MoveDirection.jump;
+                case MoveDirection.jumpRight: sr.flipX = true; goto case MoveDirection.jump;
+                case MoveDirection.jump:
+                    if (!OnGround()) {
+                        return;
+                    }
+                    break;
             }
             direction = value;
         }
@@ -56,25 +65,36 @@ public class CaveMonster : MonoBehaviour {
 
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
+        
         sr = GetComponent<SpriteRenderer>();
         Direction = startDirection;
     }
 	
 	void Update () {
+
+        //TEST
+        if (Input.GetKeyDown(KeyCode.F1)) {
+            Direction = MoveDirection.jumpLeft;
+        }
+        if (Input.GetKeyDown(KeyCode.F2)) {
+            Direction = MoveDirection.jump;
+        }
+        if (Input.GetKeyDown(KeyCode.F3)) {
+            Direction = MoveDirection.jumpRight;
+        }
+        if (Input.GetKeyDown(KeyCode.F4)) {
+            rb.MovePosition(transform.position);
+        }
+        //----
+
+        JumpRandomizer();
+
         Move(Direction);
 
-        RaycastHit2D hitLeft;
-        hitLeft = Physics2D.Raycast(transform.position, Vector3.left, 0.6f,mask);
-
-        RaycastHit2D hitRight;
-        hitRight = Physics2D.Raycast(transform.position, Vector3.right, 0.6f,mask);
-
-        if (hitLeft&&Direction==MoveDirection.left) {
-            print("(LEFT) hitgameobject name: "+hitLeft.transform.name);
+        if (GoodCollisions.CheckSide(this, Vector2.left, mask)) {
             Direction = MoveDirection.right;
         }
-        else if (hitRight&&Direction==MoveDirection.right) {
-            print("(RIGHT) hitgameobject name: " + hitRight.transform.name);
+        else if (GoodCollisions.CheckSide(this, Vector2.right, mask)) {
             Direction = MoveDirection.left;
         }
     }
@@ -85,10 +105,30 @@ public class CaveMonster : MonoBehaviour {
         switch (dir) {
             case MoveDirection.left: dirV2 = Vector2.left; jump = false; break;
             case MoveDirection.right: dirV2 = Vector2.right; jump = false; break;
+            case MoveDirection.jump: dirV2 = Vector2.up; jump = true; break;
+            case MoveDirection.jumpRight: dirV2 = Vector2.up * 1.5f + Vector2.right; jump = true; break;
+            case MoveDirection.jumpLeft: dirV2 = Vector2.up * 1.5f+Vector2.left; jump = true; break;
             default: return;
         }
-        Vector2 movement = dirV2 * speed * Time.deltaTime;
-        transform.Translate(movement);
+        if (jump) {
+            //rb.AddForce(dirV2*jumpForce);
+            rb.velocity = dirV2 * jumpForce;
+            if (Direction == MoveDirection.jumpLeft) {
+                Direction = MoveDirection.left;
+            }
+            else if (Direction == MoveDirection.jumpRight) {
+                Direction = MoveDirection.left;
+            }
+            else {
+                Direction = (sr.flipX) ? MoveDirection.right: MoveDirection.left;
+            }
+            jump = false;
+        }
+        else if (OnGround()) {
+            Vector2 movement = dirV2 * speed * Time.deltaTime;
+            transform.Translate(movement);
+        }
+        
     }
 
 
@@ -98,4 +138,19 @@ public class CaveMonster : MonoBehaviour {
             Debug.DrawLine(transform.position,contact.point,Color.green,lineLifeSpan);
         }
     }
+
+    bool OnGround() {
+        return GoodCollisions.CheckSide(this, Vector2.down, 0.6f, mask);
+    }
+
+    void JumpRandomizer() {
+        float randomFloat = Random.Range(0, 400);
+        if (randomFloat < 3) {
+            Direction = MoveDirection.jumpLeft;
+        }
+        else if (randomFloat < 6) {
+            Direction = MoveDirection.jumpRight;
+        }
+    }
 }
+
