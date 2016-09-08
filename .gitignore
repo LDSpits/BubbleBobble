@@ -26,6 +26,7 @@ desktop.ini.meta
 *.suo
 *.user
 *.sln.docstates
+*.cache
 
 # Build results
 
