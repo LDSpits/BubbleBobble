@@ -14,7 +14,7 @@ public class Bubble : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        if(direction == null)
+        if(direction == Vector2.zero)
         {
             print("error: no direction given!");
             Destroy(gameObject);
