@@ -17,13 +17,15 @@ public class PlayerMovement : MonoBehaviour {
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        GoodCollisions.CheckSide(this, Vector2.left);
     }
 
     // Update is called once per frame
     void Update() {
         //Naar links bewegen
         if (InputManager.Left) {
-            if (!GoodCollisions.CheckSide(this, Vector2.left,  0.1f, "Solid")) { //Links vrij
+            if (!GoodCollisions.CheckSide(this, Vector2.left)) { //Links vrij
                 transform.position += Vector3.left * moveSpeed * Time.deltaTime;
                 spriteRenderer.flipX = false; //Kijk naar links
                 lastDirection = Vector2.left; //onthoud waar we het laatst naartoe hebben gekeken
@@ -31,7 +33,7 @@ public class PlayerMovement : MonoBehaviour {
         }
         //Naar rechts bewegen
         if (InputManager.Right) {
-            if (!GoodCollisions.CheckSide(this, Vector2.right,  0.1f, "Solid")) { //Rechts vrij
+            if (!GoodCollisions.CheckSide(this, Vector2.right, "Solid")) { //Rechts vrij
                 transform.position += Vector3.right * moveSpeed * Time.deltaTime;
                 spriteRenderer.flipX = true; //Kijk naar rechts
                 lastDirection = Vector2.right; //onthoud waar we het laatst naartoe hebben gekeken
@@ -39,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         //Controleren of we op de grond staan
-        onGround = GoodCollisions.CheckSide(this, Vector2.down, 0.1f, -261);
+        onGround = GoodCollisions.CheckSide(this, Vector2.down);
 
         //Springen
         if (InputManager.Jump && onGround) {

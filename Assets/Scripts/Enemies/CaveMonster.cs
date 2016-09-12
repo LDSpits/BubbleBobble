@@ -87,14 +87,15 @@ public class CaveMonster : MonoBehaviour {
 
         JumpRandomizer();
 
-        Move(Direction);
-
-        if (GoodCollisions.CheckSide(this, Vector2.left, mask)) {
+        if (GoodCollisions.CheckSide(this, Vector2.left, "Solid")) {
             Direction = MoveDirection.right;
         }
-        else if (GoodCollisions.CheckSide(this, Vector2.right, mask)) {
+        else if (GoodCollisions.CheckSide(this, Vector2.right, "Solid")) {
             Direction = MoveDirection.left;
         }
+
+        Move(Direction);
+
     }
 
     void Move(MoveDirection dir) {
@@ -138,7 +139,7 @@ public class CaveMonster : MonoBehaviour {
     }
 
     bool OnGround() {
-        return GoodCollisions.CheckSide(this, Vector2.down, 0.6f, mask);
+        return GoodCollisions.CheckSide(this, Vector2.down, "Solid");
     }
 
     void JumpRandomizer() {
