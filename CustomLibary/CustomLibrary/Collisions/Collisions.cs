@@ -225,7 +225,61 @@ namespace CustomLibrary.Collisions {
             return hit;
         }
 
+		//------------------------------------
+        //AVG versie
+        //------------------------------------
 
+
+        public static bool CheckSideV2(GameObject gameObject, Vector2 direction, float distance, int layerMask, bool drawRays = true) {
+            BoxCollider2D boxColl = gameObject.GetComponent<BoxCollider2D>();
+            Vector2 sideoffset = (direction.y == 0) ? Vector2.up : Vector2.left;
+
+            Vector3 origin = gameObject.transform.position;
+
+            distance += GetAxisSizeFromCollBox(boxColl, (sideoffset == Vector2.up)? false : true,0.5f);
+
+            bool hitSomething = HitSomething(origin,direction,distance, sideoffset,  layerMask);
+
+            if (drawRays) {
+                DrawRays(origin, direction, sideoffset, distance, (hitSomething) ? Color.yellow : Color.magenta);
+            }
+
+            return hitSomething;
+        }
+
+        static void DrawRays(Vector2 origin, Vector2 direction, Vector2 sideoffset, float _distance, Color drawColor) {
+            Debug.DrawRay(origin, direction * _distance, drawColor);                                // midden
+            Debug.DrawRay((Vector2)origin + sideoffset * 0.5f, direction * _distance, drawColor);   // boven/rechts
+            Debug.DrawRay((Vector2)origin + -sideoffset * 0.5f, direction * _distance, drawColor);  // beneden/links
+        }
+
+        static bool HitSomething(Vector2 origin, Vector2 direction, float _distance, Vector2 sideoffset, int layerMask = -1) {
+            return
+            ((Physics2D.Raycast((Vector2)origin, direction, _distance, layerMask)) ||                     // midden
+            (Physics2D.Raycast((Vector2)origin + sideoffset * 0.5f, direction, _distance, layerMask)) ||  // boven/rechts
+            (Physics2D.Raycast((Vector2)origin + -sideoffset * 0.5f, direction, _distance, layerMask)));  // beneden/links             
+        }
+        static float GetAxisSizeFromCollBox(BoxCollider2D coll,bool verticalAxis, float multiplier = 1) {
+            if (coll==null) {
+                return 1 * multiplier;
+            }
+            else if (!verticalAxis) {
+                return coll.size.x * multiplier;
+            }
+            else {
+                return coll.size.y * multiplier;
+            }
+        }
+
+        public static bool CheckSideV2(GameObject gameObject, Vector2 direction, bool drawRays = true) {
+            return CheckSideV2(gameObject,direction,0.55f,-1,drawRays); //layermask met een waarde van -1 betekent 'everything = true'
+        }
+        public static bool CheckSideV2(Component comp, Vector2 direction, bool drawRays = true) {
+            return CheckSideV2(comp.gameObject, direction, 0.55f, -1,drawRays); //layermask met een waarde van -1 betekent 'everything = true'
+        }
+
+        //------------------------------------
+        //------------------------------------
     }
 
 }
