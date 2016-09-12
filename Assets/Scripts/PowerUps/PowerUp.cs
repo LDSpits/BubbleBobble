@@ -6,6 +6,8 @@ public class PowerUp : MonoBehaviour {
     public Sprite[] spriteList;
     private Animator animator;
 
+    private bool Active = false;
+
     public enum powerUpType
     {
         water = 0,
@@ -31,6 +33,14 @@ public class PowerUp : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
+    }
 
+    void OnTriggerEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Player") && !Active)
+        {
+            Active = true;
+
+        }
     }
 }
