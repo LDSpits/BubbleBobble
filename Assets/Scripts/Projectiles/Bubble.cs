@@ -23,6 +23,7 @@ public class Bubble : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
 		rb.velocity =  direction * 10;
         seconds = 0;
+        AudioManager.PlaySound(AudioManager.Sounds.BubbleShot);
 	}
 
     void Update()
@@ -46,28 +47,30 @@ public class Bubble : MonoBehaviour {
                 rb.velocity = new Vector2(rb.velocity.x + 0.1f, rb.velocity.y);
         }
 
-        //na 3 seconden verplaats naar boven
-        if (seconds > 3)
-        {
-            transform.position = Vector2.Lerp(transform.position, new Vector2(10,9), 3 * Time.deltaTime);
-            rb.velocity = new Vector2(0, -0.1f);
-        }
-
-        //na 7 seconden & geen vijand gevangen vernietig jezelf
-        if (seconds > 7 && !capturedEnemy)
+        //na 3 seconden & geen vijand gevangen vernietig jezelf
+        if (seconds > 3 && !capturedEnemy)
             Destroy(gameObject);
 
         //als er een vijand is gevangen
         if (capturedEnemy)
         {
+            //meet de tijd op
             timePassed += Time.deltaTime;
 
+            //als er 2 seconden voorbij zijn
+            if(timePassed > 2)
+            {
+                //verplaats naar boven en 
+                transform.position = Vector2.Lerp(transform.position, new Vector2(10, 9), 3 * Time.deltaTime);
+                rb.velocity = new Vector2(0, -0.1f);
+            }
+            
             //en de gepasseerde tijd nadat de vijand is gevangen hoger is dan 5 seconden
-            if(timePassed > 5)
+            if (timePassed > 5)
             {
                 capturedEnemy.transform.parent = null; //vernietig de bubbel en geef de vijand controle terug
                 capturedEnemy.SetActive(true);
-                GameObject.Destroy(gameObject);
+                Destroy(gameObject);
             }
         }
     }
@@ -76,6 +79,7 @@ public class Bubble : MonoBehaviour {
     {
         if (coll.gameObject.CompareTag("Enemy") && !capturedEnemy)
         {
+            AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
             capturedEnemy = coll.gameObject;
             gameObject.GetComponent<SpriteRenderer>().sprite = capturedEnemy.GetComponent<CaveMonster>().capturedSprite;
             capturedEnemy.SetActive(false);
