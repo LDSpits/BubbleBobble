@@ -49,15 +49,15 @@ namespace CustomLibrary.Collisions
             RaycastHit2D hit;
             bool hitSomething =
            ((hit = Physics2D.Raycast((Vector2)origin, direction, distance )) ||
-            (hit = Physics2D.Raycast((Vector2)origin + sideoffset * 0.5f, direction, distance )) ||
-            (hit = Physics2D.Raycast((Vector2)origin + -sideoffset * 0.5f, direction, distance )));
+            (hit = Physics2D.Raycast((Vector2)origin + sideoffset * distance, direction, distance + 0.05f )) ||
+            (hit = Physics2D.Raycast((Vector2)origin + -sideoffset * distance, direction, distance + 0.05f )));
 
             if (hitSomething)
                 drawColor = new Color(1, 0, 0); //Rays rood tekenen
 
             Debug.DrawRay(origin, direction * distance, drawColor);
-            Debug.DrawRay((Vector2)origin + sideoffset * 0.5f, direction * distance, drawColor);
-            Debug.DrawRay((Vector2)origin + -sideoffset * 0.5f, direction * distance, drawColor);
+            Debug.DrawRay((Vector2)origin + sideoffset * distance, direction * (distance + 0.05f), drawColor);
+            Debug.DrawRay((Vector2)origin + -sideoffset * distance, direction * (distance + 0.05f), drawColor);
 
             return hit;
         }
