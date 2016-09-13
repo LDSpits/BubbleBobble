@@ -6,7 +6,7 @@ public class PowerUp : MonoBehaviour {
     public Sprite[] spriteList;
     private Animator animator;
 
-    private bool Active = false;
+    private bool active = false;
 
     public enum powerUpType
     {
@@ -35,12 +35,26 @@ public class PowerUp : MonoBehaviour {
         
     }
 
-    void OnTriggerEnter2D(Collision2D coll)
+    void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.gameObject.CompareTag("Player") && !Active)
+        if (coll.gameObject.CompareTag("Player") && !active)
         {
-            Active = true;
+            active = true;
 
+            //water
+            if (type == 0)
+            {
+                
+            }else if((int)type == 1) //lightning
+            {
+
+            }else if((int)type == 2) //fire
+            {
+
+            }else if((int)type == 3) //fireBall
+            {
+
+            }
         }
     }
 }

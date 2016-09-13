@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class Bubble : MonoBehaviour {
 
+    public Sprite almostPopped;
+    public Sprite almostPopped2;
+
     private Rigidbody2D rb;
+    private SpriteRenderer sr;
     
     private float seconds;
     private float timePassed = 0;
@@ -21,6 +25,7 @@ public class Bubble : MonoBehaviour {
 
         transform.position = GameObject.Find("Player").transform.position;
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
 		rb.velocity =  direction * 10;
         seconds = 0;
         AudioManager.PlaySound(AudioManager.Sounds.BubbleShot);
@@ -49,7 +54,7 @@ public class Bubble : MonoBehaviour {
 
         //na 3 seconden & geen vijand gevangen vernietig jezelf
         if (seconds > 3 && !capturedEnemy)
-            Destroy(gameObject);
+            sr.sprite = almostPopped;
 
         //als er een vijand is gevangen
         if (capturedEnemy)

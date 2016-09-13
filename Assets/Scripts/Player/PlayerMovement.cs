@@ -7,37 +7,38 @@ public class PlayerMovement : MonoBehaviour {
     public float jumpSpeed = 5;
     public GameObject bubblePrefab;
 
+    
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
     private Vector2 lastDirection = Vector2.left;
 
+    private bool isMoving = false;
     private bool onGround = false;
+    private bool isDead = false;
 
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         GoodCollisions.CheckSide(this, Vector2.left);
     }
 
     // Update is called once per frame
     void Update() {
+
+        animator.SetBool("isDead", isDead);
+        isMoving = false;
+
         //Naar links bewegen
         if (InputManager.Left) {
-            if (!GoodCollisions.CheckSide(this, Vector2.left)) { //Links vrij
-                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
-                spriteRenderer.flipX = false; //Kijk naar links
-                lastDirection = Vector2.left; //onthoud waar we het laatst naartoe hebben gekeken
-            }
+            Move(Vector2.left);
         }
         //Naar rechts bewegen
         if (InputManager.Right) {
-            if (!GoodCollisions.CheckSide(this, Vector2.right, "Solid")) { //Rechts vrij
-                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
-                spriteRenderer.flipX = true; //Kijk naar rechts
-                lastDirection = Vector2.right; //onthoud waar we het laatst naartoe hebben gekeken
-            }
+            Move(Vector2.right);
         }
 
         //Controleren of we op de grond staan
@@ -56,6 +57,32 @@ public class PlayerMovement : MonoBehaviour {
             Instantiate(bubblePrefab);
         }
 
+        animator.SetBool("isMoving", isMoving);
+        animator.SetBool("onGround", onGround);
         
     }
+
+    private void Move(Vector2 direction)
+    {
+        if (!GoodCollisions.CheckSide(this, direction, "Solid"))
+        { //Links vrij
+            transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
+
+            if(direction == Vector2.left)
+                spriteRenderer.flipX = false; //Kijk naar links
+            else
+                spriteRenderer.flipX = true; //Kijk naar rechts
+
+            isMoving = true;
+            lastDirection = direction; //onthoud waar we het laatst naartoe hebben gekeken
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.CompareTag("Enemy"))
+            isDead = true;
+            
+    }
+
 }
