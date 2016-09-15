@@ -4,26 +4,64 @@ using System.Collections.Generic;
 
 public class WaterSnake : MonoBehaviour {
 
+    private Vector3 direction;
+    private float seconds = 0;
+
     public List<GameObject> waterBlocks = new List<GameObject>();
     public GameObject waterBlockFollowerPrefab;
+    private bool hasDestination = false;
 
-	void Start () {
+    void Start () {
         waterBlocks.Add(gameObject); //Voeg eerst de 'kop' toe
-	}
+        AddWaterBlock();
+        AddWaterBlock();
+        AddWaterBlock();
+    }
 	
 	void Update () {
-        if (!GoodCollisions.CheckSide(this, Vector2.down, "Solid"))
+
+        seconds += Time.deltaTime;
+
+        if (!GoodCollisions.CheckSide(this, Vector2.down,0.5f,"Solid"))
         {
-            //transform.position += Vector3.down * 0.05f;
+            transform.position += Vector3.down * 0.5f;
+            hasDestination = false;
         }
         else //We raken de grond
         {
-            if (!GoodCollisions.CheckSide(this, Vector2.left, "Solid"))
+            if (!hasDestination)
             {
-                //transform.position += Vector3.left * 0.05f;
+                direction = Choose();
+                hasDestination = true;
+            }
+            else
+            {
+                transform.position += direction * 0.5f;
             }
         }
 
+        Follow();
+
+    }
+
+    private Vector2 Choose()
+    {
+        Vector3 currentPos = transform.position;
+        for (int i = 1; i < 11; i++)
+        {
+            //op het moment dat aan de linkerkant een gat is
+            if (!GoodCollisions.CheckSide(currentPos + (Vector3.left * i), this, Vector2.down, "Solid"))
+            {
+                return Vector2.left;
+            }
+
+            //op het moment dat aan de rechterkant een gat is
+            if (!GoodCollisions.CheckSide(currentPos + (Vector3.right * i), this, Vector2.down, "Solid"))
+            {
+                return Vector2.right;
+            }
+        }
+        return Vector2.down;
     }
 
     private void Follow(){  

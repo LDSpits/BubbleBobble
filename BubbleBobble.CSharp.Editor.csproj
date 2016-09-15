@@ -102,8 +102,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\ItemDataBaseAsset.cs" />
-    <Compile Include="Assets\Editor\ScriptableObjectUtility.cs" />
+    <Compile Include="Assets\Scripts\Editor\ItemDataBaseAsset.cs" />
+    <Compile Include="Assets\Scripts\Editor\ScriptableObjectUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DLLs\UnityEngine.xml" />
