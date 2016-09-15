@@ -39,6 +39,27 @@ namespace CustomLibrary.Collisions
 
             RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance);
 
+            print(string.Format("object: {0}, distance: {1}", thisComponent.gameObject.name, _distance));
+
+            return hit && hit.collider.CompareTag(withTag);
+        }
+
+        /// <summary>
+        /// Controleer of er iets in de weg staat met een bepaalde tag met een automatische korte distance (0.05)
+        /// </summary>
+        /// <param name="thisComponent">dit object</param>
+        /// <param name="direction">De richting waarin we controleren of er iets is</param>
+        /// <param name="withTag">Welk tag het obstakel moet hebben</param>
+        /// <returns>Of er iets in de weg staat (true) of niet (false)</returns>
+        public static bool CheckSide(Vector3 origin,Component thisComponent, Vector2 direction, string withTag)
+        {
+            GameObject gameObject = thisComponent.gameObject;
+
+            Vector2 sideOffset = CalcSideOffset(direction);
+            float _distance = CalcDistance(sideOffset, gameObject.GetComponent<BoxCollider2D>());
+
+            RaycastHit2D hit = PerformRaycasts(origin, direction, sideOffset, _distance);
+
             return hit && hit.collider.CompareTag(withTag);
         }
 
@@ -56,8 +77,8 @@ namespace CustomLibrary.Collisions
                 drawColor = new Color(1, 0, 0); //Rays rood tekenen
 
             Debug.DrawRay(origin, direction * distance, drawColor);
-            Debug.DrawRay((Vector2)origin + sideoffset * distance, direction * (distance + 0.05f), drawColor);
-            Debug.DrawRay((Vector2)origin + -sideoffset * distance, direction * (distance + 0.05f), drawColor);
+            Debug.DrawRay((Vector2)origin + (sideoffset * distance), direction * (distance + 0.05f), drawColor);
+            Debug.DrawRay((Vector2)origin + (-sideoffset * distance), direction * (distance + 0.05f), drawColor);
 
             return hit;
         }
@@ -72,9 +93,9 @@ namespace CustomLibrary.Collisions
         {
             if (sideOffset == Vector2.up)
             {
-                return (collider.size.y / 2) + 0.05f;
+                return (collider.size.y / 2);
             }
-            return (collider.size.x / 2) + 0.05f;
+            return (collider.size.x / 2);
         }
     }
 }      

@@ -8,19 +8,19 @@ public class WaterSnake : MonoBehaviour {
     public GameObject waterBlockFollowerPrefab;
 
 	void Start () {
-        waterBlocks.Add(this.gameObject); //Voeg eerst de 'kop' toe
+        waterBlocks.Add(gameObject); //Voeg eerst de 'kop' toe
 	}
 	
 	void Update () {
         if (!GoodCollisions.CheckSide(this, Vector2.down, "Solid"))
         {
-            transform.position += Vector3.down * 0.05f;
+            //transform.position += Vector3.down * 0.05f;
         }
         else //We raken de grond
         {
             if (!GoodCollisions.CheckSide(this, Vector2.left, "Solid"))
             {
-                transform.position += Vector3.left * 0.05f;
+                //transform.position += Vector3.left * 0.05f;
             }
         }
 

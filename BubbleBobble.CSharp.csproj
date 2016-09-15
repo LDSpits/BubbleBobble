@@ -73,8 +73,12 @@
     <Compile Include="Assets\Scripts\Player\InputManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\PowerUps\PowerUp.cs" />
+    <Compile Include="Assets\Scripts\PowerUps\WaterSnake.cs" />
     <Compile Include="Assets\Scripts\Projectiles\Bubble.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\DLLs\UnityEngine.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
