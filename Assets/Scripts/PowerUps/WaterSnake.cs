@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using CustomLibrary.Collisions;
 using System.Collections.Generic;
+using System;
 
 public class WaterSnake : MonoBehaviour {
 
@@ -10,16 +11,18 @@ public class WaterSnake : MonoBehaviour {
     private SpriteRenderer sr;
     private Sprite bodySprite;
 
-    public Sprite waterHeadStandard;
-    public Sprite waterFallingBody;
-    public Sprite waterTurning;
+    public Sprite waterHeadStandard, waterFallingBody, waterTurning;
 
     public List<GameObject> waterBlocks = new List<GameObject>();
     public GameObject waterBlockFollowerPrefab;
 
     void Start () {
 
+        transform.position = new Vector3(transform.position.x, (float)Math.Round(transform.position.y) + 0.25f ,transform.position.z);
+
         sr = GetComponent<SpriteRenderer>();
+
+        direction = Vector3.down;
 
         waterBlocks.Add(gameObject); //Voeg eerst de 'kop' toe
         AddWaterBlock();
@@ -40,8 +43,11 @@ public class WaterSnake : MonoBehaviour {
 
         if (!GoodCollisions.CheckSide(this, Vector2.down,0.5f,"Solid"))
         {
-            if(hasDestination == true)
-                waterBlocks[1].GetComponent<SpriteRenderer>().sprite = waterTurning;
+            //Op de eerste frame dat er geen grond onder ons is
+            if (hasDestination == true) {
+                waterBlocks[1].GetComponent<SpriteRenderer>().sprite = waterTurning; //Geef de body de turning sprite
+                waterBlocks[1].transform.eulerAngles = CalcBodyRotation(true);
+            }
 
             transform.position += Vector3.down * 0.5f;
             transform.eulerAngles = new Vector3(0,0,180);
@@ -56,14 +62,13 @@ public class WaterSnake : MonoBehaviour {
                 //kies een richting
                 direction = Choose();
                 waterBlocks[1].GetComponent<SpriteRenderer>().sprite = waterTurning;
+                waterBlocks[1].transform.eulerAngles = CalcBodyRotation(false);
 
                 //bepaal rotatie voor het hoofd van de slang aan de hand van de richting
                 if (direction == Vector3.left)
                     transform.eulerAngles = new Vector3(0,0,90);
                 else if (direction == Vector3.right)
                     transform.eulerAngles = new Vector3(0, 0, 270);
-
-                
 
                 hasDestination = true;
                 transform.position += direction * 0.5f;
@@ -77,7 +82,7 @@ public class WaterSnake : MonoBehaviour {
             }
         }
 
-        
+        print(direction);
 
     }
 
@@ -101,9 +106,31 @@ public class WaterSnake : MonoBehaviour {
         return Vector2.down;
     }
 
-    private Vector3 CalcRotation()
+    private Vector3 CalcHeadRotation()
     {
-        return new Vector3();
+        if (direction == Vector3.left) {
+            return new Vector3(0, 0, 90); //Links
+        }
+
+        return new Vector3(0, 0, 270); //Rechts
+    }
+
+    private Vector3 CalcBodyRotation(bool goingDown)
+    {
+        if (goingDown) {
+            if (direction == Vector3.left) {
+                return new Vector3(0, 0, 0); //Links
+            }
+            else {
+                return new Vector3(0, 0, 270); //Rechts
+            }
+        }
+
+        if (direction == Vector3.left) {
+            return new Vector3(0, 0, 180); //Links
+        }
+
+        return new Vector3(0, 0, 90); //Rechts
     }
 
     private void Follow(){  
@@ -127,14 +154,26 @@ public class WaterSnake : MonoBehaviour {
             lastRot = currentRot;
             lastSprite = currentSprite;
         }
+
+        waterBlocks[waterBlocks.Count - 1].GetComponent<SpriteRenderer>().sprite = waterHeadStandard;
+
     }
 
     private void AddWaterBlock()
     {
         GameObject block = Instantiate(waterBlockFollowerPrefab) as GameObject;
         block.transform.parent = transform.parent;
+        block.transform.position = transform.position;
         block.transform.localScale = new Vector3(1.01f, 1.01f);
         waterBlocks.Add(block);
     }
+
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        //Sleur mee
+
+        //coll.transform.position += direction * 0.5f * Time.deltaTime;
+    }
+
 
 }

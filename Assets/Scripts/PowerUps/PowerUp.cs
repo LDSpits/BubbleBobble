@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 public class PowerUp : MonoBehaviour {
 
-    public Sprite[] spriteList;
     private Animator animator;
+
+    public GameObject waterEffectPrefab, lightningEffectPrefab, fireEffectPrefab;
 
     private bool active = false;
 
@@ -16,16 +17,13 @@ public class PowerUp : MonoBehaviour {
         fireBall = 3
     }
 
+    [SerializeField]
     private powerUpType type;
-
-    SpriteRenderer sr;
 
 	// Use this for initialization
 	void Start () {
         animator = GetComponent<Animator>();
-        sr = gameObject.GetComponent<SpriteRenderer>();
         type = (powerUpType)Random.Range(0, 4);
-        sr.sprite = spriteList[(int)type];
 
         animator.SetInteger("type", (int)type);
     }
@@ -41,10 +39,9 @@ public class PowerUp : MonoBehaviour {
         {
             active = true;
 
-            //water
-            if (type == 0)
+            if (type == 0) //Watereffect
             {
-                
+                Instantiate(waterEffectPrefab, transform.position, Quaternion.identity);
             }else if((int)type == 1) //lightning
             {
 
@@ -55,6 +52,8 @@ public class PowerUp : MonoBehaviour {
             {
 
             }
+
+            Destroy(gameObject);
         }
     }
 }
