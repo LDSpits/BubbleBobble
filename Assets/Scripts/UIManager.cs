@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour {
 
-	public static UIManager current;
+	private static UIManager current;
 
 	public GameObject scoreGO;  //GO = GameObject
 	public GameObject highScoreGO;
@@ -16,7 +16,6 @@ public class UIManager : MonoBehaviour {
 	Text lifeText;
 
     //Pauzemenu
-
 
     public GameObject pause_panel;
     public GameObject pause_main;
@@ -102,8 +101,6 @@ public class UIManager : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void Quit() {
-
+        Application.Quit();
     }
-
-    //----------
 }

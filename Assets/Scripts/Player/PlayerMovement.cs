@@ -11,7 +11,9 @@ public class PlayerMovement : MonoBehaviour {
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private BoxCollider2D bc;
     private Vector2 lastDirection = Vector2.left;
+    private float seconds = 0;
 
     private bool isMoving = false;
     private bool onGround = false;
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour {
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
 
@@ -29,34 +32,53 @@ public class PlayerMovement : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        animator.SetBool("isDead", isDead);
         isMoving = false;
 
-        //Naar links bewegen
-        if (InputManager.Left) {
-            Move(Vector2.left);
-        }
-        //Naar rechts bewegen
-        if (InputManager.Right) {
-            Move(Vector2.right);
-        }
-
-        //Controleren of we op de grond staan
-        onGround = GoodCollisions.CheckSide(this, Vector2.down);
-
-        //Springen
-        if (InputManager.Jump && onGround) {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-            AudioManager.PlaySound(AudioManager.Sounds.Jump);
-        }
-
-        //schieten van de bubbel
-        if (InputManager.Action)
+        if (!isDead)
         {
-            bubblePrefab.GetComponent<Bubble>().direction = lastDirection;
-            Instantiate(bubblePrefab);
-        }
+            //Naar links bewegen
+            if (InputManager.Left)
+            {
+                Move(Vector2.left);
+            }
+            //Naar rechts bewegen
+            if (InputManager.Right)
+            {
+                Move(Vector2.right);
+            }
 
+            //Controleren of we op de grond staan
+            onGround = GoodCollisions.CheckSide(this, Vector2.down);
+
+            //Springen
+            if (InputManager.Jump && onGround)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                AudioManager.PlaySound(AudioManager.Sounds.Jump);
+            }
+
+            //schieten van de bubbel
+            if (InputManager.Action)
+            {
+                bubblePrefab.GetComponent<Bubble>().direction = lastDirection;
+                Instantiate(bubblePrefab);
+            }
+        }
+        else
+        {
+            seconds += Time.deltaTime;
+
+            if (seconds > 2)
+            {
+                isDead = false;
+                animator.SetBool("isDead", false);
+                transform.position = new Vector2(3, 1);
+                rb.WakeUp();
+                bc.enabled = true;
+            }
+            
+        }
+        
         animator.SetBool("isMoving", isMoving);
         animator.SetBool("onGround", onGround);
         
@@ -81,8 +103,17 @@ public class PlayerMovement : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.CompareTag("Enemy"))
+        {
+            AudioManager.PlaySound(AudioManager.Sounds.Death);
             isDead = true;
+            animator.SetBool("isDead", true);
+            GameManager.DecreaseLife();
+            bc.enabled = false;
+            seconds = 0;
+            rb.Sleep();
+        }
             
+        
     }
 
 }

@@ -7,6 +7,7 @@ public class Bubble : MonoBehaviour {
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private Animator animator;
     
     private float seconds;
     private float timePassed = 0;
@@ -24,6 +25,7 @@ public class Bubble : MonoBehaviour {
         }
 
         transform.position = GameObject.Find("Player").transform.position;
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 		rb.velocity =  direction * 10;
@@ -53,8 +55,16 @@ public class Bubble : MonoBehaviour {
         }
 
         //na 3 seconden & geen vijand gevangen vernietig jezelf
-        if (seconds > 3 && !capturedEnemy)
-            sr.sprite = almostPopped;
+        if (seconds > 2 && !capturedEnemy)
+            animator.SetInteger("status", 1);
+        if (seconds > 4 && !capturedEnemy)
+            animator.SetInteger("status", 2);
+        if (seconds > 6 && !capturedEnemy)
+        {
+            animator.SetInteger("status", 3);
+            Destroy(gameObject, animator.GetCurrentAnimatorClipInfo(SortingLayer.GetLayerValueFromName("Default"))[0].clip.averageDuration);
+        }
+            
 
         //als er een vijand is gevangen
         if (capturedEnemy)
@@ -89,7 +99,7 @@ public class Bubble : MonoBehaviour {
             gameObject.GetComponent<SpriteRenderer>().sprite = capturedEnemy.GetComponent<CaveMonster>().capturedSprite;
             capturedEnemy.SetActive(false);
             capturedEnemy.transform.SetParent(transform);
-            capturedEnemy.transform.localPosition = new Vector2();
+            capturedEnemy.transform.localPosition = Vector2.zero;
             transform.position = Vector2.Lerp(transform.position, new Vector2(10, 9), 3 * Time.deltaTime);
         }
 

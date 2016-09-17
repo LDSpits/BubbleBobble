@@ -12,11 +12,14 @@ public class WaterSnake : MonoBehaviour {
     private Sprite bodySprite;
 
     public Sprite waterHeadStandard, waterFallingBody, waterTurning;
+    public float distance = 0.5f;
 
     public List<GameObject> waterBlocks = new List<GameObject>();
     public GameObject waterBlockFollowerPrefab;
 
     void Start () {
+
+        AudioManager.PlaySound(AudioManager.Sounds.WaterFlow);
 
         transform.position = new Vector3(transform.position.x, (float)Math.Round(transform.position.y) + 0.25f ,transform.position.z);
 
