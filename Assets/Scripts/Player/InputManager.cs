@@ -15,12 +15,12 @@ public static class InputManager {
 
     public static bool Jump
     {
-        get { return Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space); }
+        get { return Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow); }
     }
 
     public static bool Action
     {
-        get { return Input.GetKeyDown(KeyCode.E); }
+        get { return Input.GetKeyDown(KeyCode.Space); }
     }
 
 }

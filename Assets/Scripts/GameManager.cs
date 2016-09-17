@@ -10,7 +10,7 @@ public static class GameManager {
     public static void SetScore(int amount)
     {
         score += amount;
-        UIManager.ScoreText = string.Format("score p1 : {0}",score);
+        UIManager.UpdateScoreP1(score);
 
         if(score > highscore)
         {
@@ -24,7 +24,6 @@ public static class GameManager {
     public static void DecreaseLife()
     {
         lives -= 1;
-        UIManager.LifeText = string.Format("life : {0}", lives);
     }
 
 }

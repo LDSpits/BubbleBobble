@@ -36,13 +36,13 @@ public class PlayerMovement : MonoBehaviour {
 
         if (!isDead)
         {
-            //Naar links bewegen
-            if (InputManager.Left)
+            //naar links bewegen
+            if (InputManager.Left && !InputManager.Right)
             {
                 Move(Vector2.left);
             }
             //Naar rechts bewegen
-            if (InputManager.Right)
+            if (InputManager.Right && !InputManager.Left)
             {
                 Move(Vector2.right);
             }

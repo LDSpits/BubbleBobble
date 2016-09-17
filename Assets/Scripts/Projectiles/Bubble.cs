@@ -96,7 +96,7 @@ public class Bubble : MonoBehaviour {
         {
             AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
             capturedEnemy = coll.gameObject;
-            gameObject.GetComponent<SpriteRenderer>().sprite = capturedEnemy.GetComponent<CaveMonster>().capturedSprite;
+            //gameObject.GetComponent<SpriteRenderer>().sprite = capturedEnemy.GetComponent<CaveMonster>().capturedSprite;
             capturedEnemy.SetActive(false);
             capturedEnemy.transform.SetParent(transform);
             capturedEnemy.transform.localPosition = Vector2.zero;

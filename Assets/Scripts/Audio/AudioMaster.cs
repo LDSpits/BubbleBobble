@@ -28,11 +28,21 @@ public class AudioMaster : MonoBehaviour
 
     public void PlaySound(AudioManager.Sounds sound)
     {
+        AudioSource slaveSource = null;
+        foreach(GameObject obj in audioSlaves)
+        {
+            if (!obj.GetComponent<AudioSource>().isPlaying)
+            {
+                slaveSource = obj.GetComponent<AudioSource>();
+                break;
+            }
+        }
+
         //als de eerste AudioSlave bezig is
-        if (audioSlaves[0].GetComponent<AudioSource>().isPlaying)
+        if (slaveSource == null)
         {
             //Creër een nieuwe AudioSlave en laat hem het geluid afspelen
-            AudioSource slaveSource = CreateAudioSlave().GetComponent<AudioSource>();
+            slaveSource = CreateAudioSlave().GetComponent<AudioSource>();
             slaveSource.PlayOneShot(audioClips[(int)sound]);
 
             //vernietig de AudioSlave
@@ -46,7 +56,13 @@ public class AudioMaster : MonoBehaviour
 
     }
 
-    
+    public void PlayContinuous(AudioManager.Sounds sound)
+    {
+        //creëer een nieuwe AudioSlave specifiek voor het afspelen van het geluid;
+        AudioSource aud = CreateAudioSlave().GetComponent<AudioSource>();
+        aud.clip = audioClips[(int)sound];
+        aud.Play();
+    }
 
 }
 

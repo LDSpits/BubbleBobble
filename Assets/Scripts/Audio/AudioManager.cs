@@ -1,9 +1,15 @@
+using System;
 using UnityEngine;
 
 public static class AudioManager {
 
     public static AudioMaster SetAudioMaster { set { audioMaster = value; } }
     private static AudioMaster audioMaster;
+
+    internal static void PlayBackGroundMusic()
+    {
+        
+    }
 
     // globale functie voor het afspelen van geluiden
     public static void PlaySound(Sounds sound)
@@ -40,7 +46,8 @@ public static class AudioManager {
         PickupItem,
         Unknown,
         WaterFlow,
-        Jump
+        Jump,
+        BackgroundMusic
     }
 
 }
