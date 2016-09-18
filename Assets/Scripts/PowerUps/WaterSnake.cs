@@ -84,9 +84,6 @@ public class WaterSnake : MonoBehaviour {
                 transform.position += direction * 0.5f;
             }
         }
-
-        print(direction);
-
     }
 
     private Vector2 Choose()

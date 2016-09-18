@@ -3,11 +3,9 @@ using UnityEngine;
 public class Bubble : MonoBehaviour {
 
     private float speed;
-    private SpriteRenderer sr;
     private Animator animator;
     
     private float seconds;
-    private float timePassed = 0;
 
     public Vector2 direction;
 	
@@ -15,7 +13,6 @@ public class Bubble : MonoBehaviour {
     void Start () {
         transform.position = GameObject.Find("Player").transform.position;
         animator = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
 
         speed = direction.x * 15; //Bubbel lanceer-snelheid
 
@@ -37,24 +34,6 @@ public class Bubble : MonoBehaviour {
             transform.Translate(direction * -speed * Time.deltaTime);
         }
 
-        /*
-        //als de horizontale shelheid meer is dan de berekening van de huidige richting - de huidige snelheid
-        if (rb.velocity.x > 0 ) 
-        {
-            if (rb.velocity.x < 0.2)
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            else
-                rb.velocity = new Vector2(rb.velocity.x - 0.1f, rb.velocity.y);
-        }
-
-        if (rb.velocity.x < 0)
-        {
-            if(rb.velocity.x > -0.8)
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            else
-                rb.velocity = new Vector2(rb.velocity.x + 0.1f, rb.velocity.y);
-        }*/
-
         //Vernietig jezelf na een bepaalde tijd
         if (seconds > 2)
             animator.SetInteger("status", 1);
@@ -63,10 +42,8 @@ public class Bubble : MonoBehaviour {
         if (seconds > 6)
         {
             animator.SetInteger("status", 3);
-            //Destroy(gameObject, animator.GetCurrentAnimatorClipInfo(SortingLayer.GetLayerValueFromName("Default"))[0].clip.averageDuration); Nee
             Destroy(gameObject, 1);
         }
-
             
     }
 	
