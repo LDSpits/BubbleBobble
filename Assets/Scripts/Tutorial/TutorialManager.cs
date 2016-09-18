@@ -14,21 +14,24 @@ public class TutorialManager : MonoBehaviour {
 
     void Start () {
         //Voeg alle missies in
-        AddMission(0, "Basisvaardigheden...", Color.yellow, "Loop naar links en rechts met de linker en rechter pijltjes of <color=#00FF15>A</color> & <color=#00FF15>D</color>.");
+        AddMission(0, "Basisvaardigheden...", Color.yellow, "Loop naar links en rechts met <color=#00FF15>linkerpijl</color> & <color=#00FF15>rechterpijl</color> of <color=#00FF15>A</color> & <color=#00FF15>D</color>.");
         AddMission(1, "Basisvaardigheden...", Color.yellow, "Spring met <color=#00FF15>pijl omhoog</color> of <color=#00FF15>W</color>.");
         AddMission(2, "Basisvaardigheden...", Color.yellow, "Vang vijanden in bubbels. Blaas bubbels met <color=#00FF15>Spatie</color>.");
-        AddMission(3, "Goedzo!", Color.green, "Maak nu de bubbel kapot door er tegenaan te springen.");
-        AddMission(4, "Geavanceerde vaardigheden...", new Color(1,0.5f,0.5f), "Spring op je bubbel om hogerop te komen.");
+        AddMission(3, "Goedzo!", Color.green, "Maak nu de bubbel kapot met je stekels of rugvinnen.");
+        AddMission(4, "Fantastisch!", Color.yellow, "");
+        AddMission(5, "Geavanceerde vaardigheden...", new Color(1,0.5f,0.5f), "Spring bovenop je bubbel om hogerop te komen.");
 
         //Toon de eerste missie
         DisplayMission(currentMission);
 	}
 
     void Update() {
-        if (currentMission == 0 && InputManager.Left || InputManager.Right) {
+        if (currentMission == 0 && InputManager.Left || InputManager.Right) { //Missie: Bewegen
             CompleteMission(0);
         }
-        else if (currentMission == 1 && InputManager.Jump) {
+
+        if (currentMission <= 1 && InputManager.Jump) { //Missie: Springen
+            CompleteMission(0);
             CompleteMission(1);
         }
     }
@@ -53,6 +56,15 @@ public class TutorialManager : MonoBehaviour {
             currentMission++;
             DisplayMission(currentMission);
         }
+    }
+
+    public int GetCurrentMission() {
+        return currentMission;
+    }
+
+    public void SetCurrentMission(int missionID) {
+        currentMission = missionID;
+        DisplayMission(currentMission);
     }
 
 }

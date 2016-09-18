@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AudioManager : MonoBehaviour 
 {
-    private static AudioManager instance = null;
+    private static AudioManager instance;
     private static AudioSlave bgMusic;
     private bool isPaused = false;
 
@@ -14,10 +14,14 @@ public class AudioManager : MonoBehaviour
     //deze lijst bevat alle AudioSlaves
     private List<AudioSlave> audioSlaves = new List<AudioSlave>();
 
-    void Start()
+    void Awake()
     {
         instance = this;
         bgMusic = new AudioSlave(this);
+    }
+
+    void Start()
+    {
         audioSlaves.Add(new AudioSlave(this));
     } 
     

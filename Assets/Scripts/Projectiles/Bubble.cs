@@ -2,33 +2,23 @@ using UnityEngine;
 
 public class Bubble : MonoBehaviour {
 
-    public Sprite almostPopped;
-    public Sprite almostPopped2;
-
-    private Rigidbody2D rb;
+    private float speed;
     private SpriteRenderer sr;
     private Animator animator;
     
     private float seconds;
     private float timePassed = 0;
-    private GameObject capturedEnemy;
 
     public Vector2 direction;
 	
     // Use this for initialization
     void Start () {
-
-        if(direction == Vector2.zero)
-        {
-            print("error: no direction given!");
-            Destroy(gameObject);
-        }
-
         transform.position = GameObject.Find("Player").transform.position;
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-		rb.velocity =  direction * 10;
+
+        speed = direction.x * 15; //Bubbel lanceer-snelheid
+
         seconds = 0;
         AudioManager.PlaySound(AudioManager.Sounds.BubbleShot);
 	}
@@ -37,6 +27,17 @@ public class Bubble : MonoBehaviour {
     {
 		seconds += Time.deltaTime;
 
+        if (Mathf.Abs(speed) <= 0.4f) { //Als we te langzaam gaan, stop dan af
+            speed = 0;
+        }else if (speed > 0) { //Naar rechts
+            speed -= 0.4f;
+            transform.Translate(direction * speed * Time.deltaTime);
+        }else if (speed < 0) { //Naar links
+            speed += 0.4f;
+            transform.Translate(direction * -speed * Time.deltaTime);
+        }
+
+        /*
         //als de horizontale shelheid meer is dan de berekening van de huidige richting - de huidige snelheid
         if (rb.velocity.x > 0 ) 
         {
@@ -52,70 +53,41 @@ public class Bubble : MonoBehaviour {
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
                 rb.velocity = new Vector2(rb.velocity.x + 0.1f, rb.velocity.y);
-        }
+        }*/
 
-        //na 3 seconden & geen vijand gevangen vernietig jezelf
-        if (seconds > 2 && !capturedEnemy)
+        //Vernietig jezelf na een bepaalde tijd
+        if (seconds > 2)
             animator.SetInteger("status", 1);
-        if (seconds > 4 && !capturedEnemy)
+        if (seconds > 4)
             animator.SetInteger("status", 2);
-        if (seconds > 6 && !capturedEnemy)
+        if (seconds > 6)
         {
             animator.SetInteger("status", 3);
-            Destroy(gameObject, animator.GetCurrentAnimatorClipInfo(SortingLayer.GetLayerValueFromName("Default"))[0].clip.averageDuration);
+            //Destroy(gameObject, animator.GetCurrentAnimatorClipInfo(SortingLayer.GetLayerValueFromName("Default"))[0].clip.averageDuration); Nee
+            Destroy(gameObject, 1);
         }
-            
 
-        //als er een vijand is gevangen
-        if (capturedEnemy)
-        {
-            //meet de tijd op
-            timePassed += Time.deltaTime;
-
-            //als er 2 seconden voorbij zijn
-            if(timePassed > 2)
-            {
-                //verplaats naar boven en 
-                transform.position = Vector2.Lerp(transform.position, new Vector2(10, 9), 3 * Time.deltaTime);
-                rb.velocity = new Vector2(0, -0.1f);
-            }
             
-            //en de gepasseerde tijd nadat de vijand is gevangen hoger is dan 5 seconden
-            if (timePassed > 5)
-            {
-                capturedEnemy.transform.parent = null; //vernietig de bubbel en geef de vijand controle terug
-                capturedEnemy.SetActive(true);
-                Destroy(gameObject);
-            }
-        }
     }
 	
 	void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.gameObject.CompareTag("Enemy") && !capturedEnemy)
+        if (coll.CompareTag("Enemy") && speed != 0)
         {
-            AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
-            capturedEnemy = coll.gameObject;
-            //gameObject.GetComponent<SpriteRenderer>().sprite = capturedEnemy.GetComponent<CaveMonster>().capturedSprite;
-            capturedEnemy.SetActive(false);
-            capturedEnemy.transform.SetParent(transform);
-            capturedEnemy.transform.localPosition = Vector2.zero;
-            transform.position = Vector2.Lerp(transform.position, new Vector2(10, 9), 3 * Time.deltaTime);
-        }
+            //Verkrijg het cavemonster script van de enemy
+            CaveMonster caveMonsterScript = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
 
-        if (coll.gameObject.CompareTag("Player") && capturedEnemy)
-        {
+            caveMonsterScript.Capture(); //'Capture' de vijand, zet de vijand in bubbelmodus.
+
             Destroy(gameObject);
         }
-
-        if (coll.gameObject.CompareTag("Player") && !capturedEnemy)
-        {
-            if(seconds > 0.5f)
-            {
-                GameManager.setScore(GameManager.players.player1, 10);
-                Destroy(gameObject);
-            }
-            
+        else if (coll.CompareTag("Player") && speed == 0) { //Speler raakt ons aan, ga direct kapot
+            seconds = 0;
+            animator.SetInteger("status", 4);
+            Destroy(gameObject, 0.5f);
         }
     }
+
+
 }
+

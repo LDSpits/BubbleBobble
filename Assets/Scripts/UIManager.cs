@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour {
         pause_guide.SetActive(false);
         pauseMenuIsOn = true;
         AudioManager.PauseBackgroundMusic();
-        PlayerMovement.Freeze();
+        Time.timeScale = 0;
     }
 
     public void Resume() {
@@ -119,7 +119,7 @@ public class UIManager : MonoBehaviour {
         pause_guide.SetActive(false);
         pauseMenuIsOn = false;
         AudioManager.PlayBackgroundMusic();
-        PlayerMovement.UnFreeze();
+        Time.timeScale = 1;
     }
     public void GoToManual() {
         print("Manual");
