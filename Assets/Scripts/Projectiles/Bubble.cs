@@ -104,7 +104,18 @@ public class Bubble : MonoBehaviour {
         }
 
         if (coll.gameObject.CompareTag("Player") && capturedEnemy)
+        {
             Destroy(gameObject);
+        }
 
+        if (coll.gameObject.CompareTag("Player") && !capturedEnemy)
+        {
+            if(seconds > 0.5f)
+            {
+                GameManager.setScore(GameManager.players.player1, 10);
+                Destroy(gameObject);
+            }
+            
+        }
     }
 }

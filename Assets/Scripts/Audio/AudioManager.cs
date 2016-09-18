@@ -1,31 +1,84 @@
-using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
-public static class AudioManager {
 
-    public static AudioMaster SetAudioMaster { set { audioMaster = value; } }
-    private static AudioMaster audioMaster;
+public class AudioManager : MonoBehaviour 
+{
+    private static AudioManager instance = null;
+    private static AudioSlave bgMusic;
+    private bool isPaused = false;
 
-    internal static void PlayBackGroundMusic()
+    //deze lijst is gevult vanuit de unity edtor en bevat alle geluiden
+    public List<AudioClip> audioClips;
+
+    //deze lijst bevat alle AudioSlaves
+    private List<AudioSlave> audioSlaves = new List<AudioSlave>();
+
+    void Start()
     {
+        instance = this;
+        bgMusic = new AudioSlave(this);
+        audioSlaves.Add(new AudioSlave(this));
+    } 
+    
+
+    public static void PlaySound(Sounds sound)
+    {
+        //doorzoek de lijst met AudioSlaves of er eentje vrij is
+        AudioSlave slaveSource = null;
+        foreach(AudioSlave obj in instance.audioSlaves)
+        {
+            if (!obj.isPlaying)
+            {
+                slaveSource = obj;
+                break;
+            }
+        }
+
+        //als er GEEN vrije slave gevonden is
+        if (slaveSource == null)
+        {
+            //Creër een nieuwe AudioSlave en laat hem het geluid afspelen
+            slaveSource = new AudioSlave(instance);
+            slaveSource.PlayOnce(instance.audioClips[(int)sound]);
+
+            //vernietig de AudioSlave
+            Destroy(slaveSource.gameObject, instance.audioClips[(int)sound].length);
+        }
+        else
+        {
+            // speel het audiobestand af met de vrije Audioslave
+            instance.audioSlaves[0].PlayOnce(instance.audioClips[(int)sound]);
+        }
+
+    }
+
+    public static void PlayContinuous(Sounds sound)
+    {
+        //creëer een nieuwe AudioSlave specifiek voor het afspelen van het geluid;
+        AudioSlave slave = new AudioSlave(instance); 
+        slave.PlayContinuous(instance.audioClips[(int)sound]);
         
     }
 
-    // globale functie voor het afspelen van geluiden
-    public static void PlaySound(Sounds sound)
+    public static void PlayBackgroundMusic()
     {
-        //als er geen audiomaster wordt gevonden
-        if (!audioMaster)
+        if(!instance.isPaused)
+            bgMusic.PlayContinuous(instance.audioClips[(int)Sounds.BackgroundMusic]);
+        else
         {
-            //geef een waarschuwing en sluit de functie af
-            Debug.LogWarning("Warning: no Audio Master object found");
-            return;
+            bgMusic.UnPause();
+            instance.isPaused = false;
         }
-        //speel een geluid af
-        audioMaster.PlaySound(sound);
+
     }
 
-    //een publieke enumerator met alle geluiden
+    public static void PauseBackgroundMusic()
+    {
+        bgMusic.Pause();
+        instance.isPaused = true;
+    }
+
     public enum Sounds
     {
         BigExplosion,
@@ -50,4 +103,44 @@ public static class AudioManager {
         BackgroundMusic
     }
 
+    internal class AudioSlave : Object
+    {
+        private GameObject slave = null;
+        private AudioSource source = null;
+
+        public AudioSlave(Component thisComponent)
+        {
+            slave = new GameObject("audio slave");
+            source = slave.AddComponent<AudioSource>();
+            slave.transform.SetParent(thisComponent.gameObject.transform);
+        }
+
+        public void PlayOnce(AudioClip clip)
+        {
+            source.PlayOneShot(clip);
+        }
+
+        public void PlayContinuous(AudioClip clip)
+        {
+            source.loop = true;
+            source.clip = clip;
+            source.volume = 0.7f;
+            source.Play();
+        }
+
+        public void Pause()
+        {
+            source.Pause();
+        }
+
+        public void UnPause()
+        {
+            source.UnPause();
+        }
+
+        public bool isPlaying { get { return source.isPlaying; } }
+
+        public GameObject gameObject { get { return slave; } }
+
+    }
 }

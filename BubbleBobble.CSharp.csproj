@@ -67,12 +67,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
-    <Compile Include="Assets\Scripts\Audio\AudioMaster.cs" />
-    <Compile Include="Assets\Scripts\BonusUtilities.cs" />
-    <Compile Include="Assets\Scripts\Database\ItemDatabase.cs" />
     <Compile Include="Assets\Scripts\Enemies\CaveMonster.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\Item.cs" />
+    <Compile Include="Assets\Scripts\Items\BonusUtilities.cs" />
+    <Compile Include="Assets\Scripts\Items\Database\ItemDatabase.cs" />
+    <Compile Include="Assets\Scripts\Items\Item.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Player\InputManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="Assets\Scripts\Tutorial\TutorialCaveMonster.cs" />
     <Compile Include="Assets\Scripts\Tutorial\TutorialManager.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
-    <Compile Include="Assets\Scripts\gameStartScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DLLs\UnityEngine.xml" />

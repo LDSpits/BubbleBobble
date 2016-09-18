@@ -32,6 +32,11 @@ public class UIManager : MonoBehaviour {
     }
     //----
 
+    //Game Paused
+    public static bool isPaused {
+        get { return instance.pauseMenuIsOn; }
+    }
+
     //Score title Player 1
 	public static string ScoreTitleP1 {
 		set{ instance.scoreTitleP1.text = value; }
@@ -56,12 +61,14 @@ public class UIManager : MonoBehaviour {
     public static string HighScoreTitle {
         set { instance.highScoreTitle.text = value; }
     }
+
     //Highscore Text
-    public static string HighScoreText {
-		set{ instance.highScoreText.text = value; }
-	}
+    public static void UpdateHighscore(long score)
+    {
+        instance.highScoreText.text = AddZeros(score);
+    }
     //Game Over tonen
-	public static bool SetUIGameOverState{
+    public static bool SetUIGameOverState{
 		set{ instance.gameOverGO.SetActive (value); }
 	}
 
@@ -100,6 +107,8 @@ public class UIManager : MonoBehaviour {
         pause_main.SetActive(true);
         pause_guide.SetActive(false);
         pauseMenuIsOn = true;
+        AudioManager.PauseBackgroundMusic();
+        PlayerMovement.Freeze();
     }
 
     public void Resume() {
@@ -109,6 +118,8 @@ public class UIManager : MonoBehaviour {
         pause_main.SetActive(false);
         pause_guide.SetActive(false);
         pauseMenuIsOn = false;
+        AudioManager.PlayBackgroundMusic();
+        PlayerMovement.UnFreeze();
     }
     public void GoToManual() {
         print("Manual");

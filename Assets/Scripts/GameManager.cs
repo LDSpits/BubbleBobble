@@ -1,29 +1,77 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class GameManager {
+public class GameManager : MonoBehaviour {
 
-    private static int score = 0;
-    private static int lives = 3;
-    private static int highscore = PlayerPrefs.GetInt("highScore");
+    private static GameManager instance = null;
 
-    public static void SetScore(int amount)
-    {
-        score += amount;
-        UIManager.UpdateScoreP1(score);
+    private int p1Lives = 3;
+    private int p2Lives = 3;
 
-        if(score > highscore)
+    private int p1Score = 0;
+    private int p2Score = 0;
+
+    private int highScore; 
+
+    // Use this for initialization
+    void Start () {
+        instance = this;
+        AudioManager.PlayBackgroundMusic();
+        highScore = PlayerPrefs.GetInt("highScore");
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        if (p1Lives <= 0)
         {
-            highscore = score;
-            UIManager.HighScoreText = string.Format("high score : {0}", highscore);
-            PlayerPrefs.SetInt("highScore", highscore);
-            PlayerPrefs.Save();
+            UIManager.SetUIGameOverState = true;
+        }
+	}
+
+    public static void setScore(players player, int amount)
+    {
+        if (player == players.player1)
+        {
+            print(instance.p1Score);
+            instance.p1Score += amount;
+            UIManager.UpdateScoreP1(instance.p1Score);
+
+            if(instance.p1Score > instance.highScore)
+            {
+                UIManager.UpdateHighscore(instance.p1Score);
+                PlayerPrefs.SetInt("p1Highscore", instance.p1Score);
+                PlayerPrefs.Save();
+            }
+        }else
+        {
+            instance.p2Score += amount;
+            UIManager.UpdateScoreP2(instance.p2Score);
+
+            if(instance.p2Score > instance.highScore)
+            {
+                UIManager.UpdateHighscore(instance.p2Score);
+                PlayerPrefs.SetInt("highScore", instance.highScore);
+                PlayerPrefs.Save();
+            }
+        }
+
+    }
+
+    public static void DecreaseLife(players player)
+    {
+        if(player == players.player1)
+        {
+            instance.p1Lives -= 1;
+        }else
+        {
+            instance.p2Lives -= 1;
         }
     }
 
-    public static void DecreaseLife()
+    public enum players
     {
-        lives -= 1;
+        player1,
+        player2
     }
 
 }

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour {
     public float jumpSpeed = 5;
     public GameObject bubblePrefab;
 
-    
+    private static PlayerMovement instance = null;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -15,12 +15,14 @@ public class PlayerMovement : MonoBehaviour {
     private Vector2 lastDirection = Vector2.left;
     private float seconds = 0;
 
+    private bool isFrozen = false;
     private bool isMoving = false;
     private bool onGround = false;
     private bool isDead = false;
 
     // Use this for initialization
     void Start() {
+        instance = this;
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -34,7 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 
         isMoving = false;
 
-        if (!isDead)
+        if (!isDead && !isFrozen)
         {
             //naar links bewegen
             if (InputManager.Left && !InputManager.Right)
@@ -48,7 +50,7 @@ public class PlayerMovement : MonoBehaviour {
             }
 
             //Controleren of we op de grond staan
-            onGround = GoodCollisions.CheckSide(this, Vector2.down);
+            onGround = GoodCollisions.CheckSide(this, Vector2.down, "Solid");
 
             //Springen
             if (InputManager.Jump && onGround)
@@ -64,11 +66,11 @@ public class PlayerMovement : MonoBehaviour {
                 Instantiate(bubblePrefab);
             }
         }
-        else
+        else if(isDead)
         {
             seconds += Time.deltaTime;
 
-            if (seconds > 2)
+            if (seconds > 2 && !UIManager.isPaused)
             {
                 isDead = false;
                 animator.SetBool("isDead", false);
@@ -107,13 +109,27 @@ public class PlayerMovement : MonoBehaviour {
             AudioManager.PlaySound(AudioManager.Sounds.Death);
             isDead = true;
             animator.SetBool("isDead", true);
-            GameManager.DecreaseLife();
+            GameManager.DecreaseLife(GameManager.players.player1);
             bc.enabled = false;
             seconds = 0;
             rb.Sleep();
         }
-            
-        
+    }
+
+    public static void Freeze()
+    {
+        instance.isFrozen = true;
+        instance.bc.enabled = false;
+        instance.rb.Sleep();
+        instance.animator.enabled = false;
+    }
+
+    public static void UnFreeze()
+    {
+        instance.isFrozen = false;
+        instance.bc.enabled = true;
+        instance.rb.WakeUp();
+        instance.animator.enabled = true;
     }
 
 }
