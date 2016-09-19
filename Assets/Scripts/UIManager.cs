@@ -5,14 +5,14 @@ public class UIManager : MonoBehaviour {
 
 	private static UIManager instance;
 
-    //De levens van speler1 & speler2
-    private int livesP1;
-    private int livesP2;
+    //BubbleLives Velden
+    [SerializeField] private GameObject bubbleLivesP1;
+    [SerializeField] private GameObject bubbleLivesP2;
 
     //Text refs
-    public Text highScoreTitle, highScoreText;
-    public Text scoreTitleP1, scoreTextP1; //Score P1
-	public Text scoreTitleP2, scoreTextP2; //Score P2
+    [SerializeField] private Text highScoreTitle, highScoreText;
+    [SerializeField] private Text scoreTitleP1, scoreTextP1; //Score P1
+	[SerializeField] private Text scoreTitleP2, scoreTextP2; //Score P2
 
     //GameOver
     public GameObject gameOverGO;
@@ -37,15 +37,27 @@ public class UIManager : MonoBehaviour {
         get { return instance.pauseMenuIsOn; }
     }
 
+    /* Player 1 */
+    //Lives Player 1 
+    public static void SetLivesP1(int lives) {
+        DisplayLives(instance.bubbleLivesP1, lives);
+    }
+
     //Score title Player 1
-	public static string ScoreTitleP1 {
+    public static string ScoreTitleP1 {
 		set{ instance.scoreTitleP1.text = value; }
 	}
 
     //Score text Player 1
     public static void UpdateScoreP1(long score) {
         instance.scoreTextP1.text = AddZeros(score);
-    } 
+    }
+
+    /* Player 2 */
+    //Lives Player 12
+    public static void SetLivesP2(int lives) {
+        DisplayLives(instance.bubbleLivesP2, lives);
+    }
 
     //Score title Player 2
     public static string ScoreTitleP2 {
@@ -72,9 +84,11 @@ public class UIManager : MonoBehaviour {
 		set{ instance.gameOverGO.SetActive (value); }
 	}
 
-    void Start() {
+    void Awake() {
         instance = this;
+    }
 
+    void Start() {
         gameOverGO.SetActive(false);
         Resume();
     }
@@ -82,6 +96,16 @@ public class UIManager : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             PauseMenuToggle();
+        }
+    }
+
+    
+    private static void DisplayLives(GameObject bubbleLives, int lives) { //Werkt voor nu alleen nog voor speler 1 !!!!
+        for(int i=0; i<bubbleLives.transform.childCount; i++) {
+            if (i < lives)
+                bubbleLives.transform.GetChild(i).gameObject.SetActive(true); //Bubbel tonen
+            else
+                bubbleLives.transform.GetChild(i).gameObject.SetActive(false); //Bubbel verbergen
         }
     }
 

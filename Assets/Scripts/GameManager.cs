@@ -5,13 +5,21 @@ public class GameManager : MonoBehaviour {
 
     private static GameManager instance = null;
 
-    private int p1Lives = 3;
-    private int p2Lives = 3;
+    [SerializeField]
+    private int p1Lives = 5;
+
+    [SerializeField]
+    private int p2Lives = 5;
 
     private int p1Score = 0;
     private int p2Score = 0;
 
     private int highScore; 
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 
     // Use this for initialization
     void Start () {
@@ -62,9 +70,11 @@ public class GameManager : MonoBehaviour {
         if(player == players.player1)
         {
             instance.p1Lives -= 1;
+            UIManager.SetLivesP1(instance.p1Lives);
         }else
         {
             instance.p2Lives -= 1;
+            UIManager.SetLivesP2(instance.p2Lives);
         }
     }
 

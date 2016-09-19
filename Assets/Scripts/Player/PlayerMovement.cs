@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour {
         animator = GetComponent<Animator>();
 
         GoodCollisions.CheckSide(this, Vector2.left);
+
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
     }
 
     // Update is called once per frame
@@ -107,7 +109,8 @@ public class PlayerMovement : MonoBehaviour {
             CaveMonster caveMonster = coll.collider.GetComponent(typeof(CaveMonster)) as CaveMonster;
 
             if (caveMonster.IsCaptured) { //Het cavemonster zit in een bubbel, vernietig hem!
-                Destroy(coll.gameObject);
+                caveMonster.Kill(true);
+                //Destroy(coll.gameObject);
                 AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
             }
             else { //Het cavemonster zit niet in een bubbel, uh oh...

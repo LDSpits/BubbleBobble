@@ -8,9 +8,12 @@ using System.Collections;
 using UnityEditor;
 #endif
 
+
 public class Item : MonoBehaviour {
 
-    [HideInInspector] public int itemIndex;
+    public int itemIndex;
+
+    public bool pickupAble = true;
 
     public ItemDatabase database;
 
@@ -36,7 +39,7 @@ public class Item : MonoBehaviour {
             {
                 transform.parent = parentObject.transform;
             }
-            //onderstaande code onschadelijk gemaakt omdat het 2 gameobjecten maakt in plaats van 1
+            //onderstaande code onschadelijk gemaakt omdat er 2 gameobjecten in de scene wordt geplaatst in plaats van 1
             /*else
             {
                 parentObject = Instantiate(new GameObject("Items"),Vector3.zero,Quaternion.identity) as GameObject;
@@ -45,8 +48,9 @@ public class Item : MonoBehaviour {
         }
     }
 
-	void OnTriggerEnter2D (Collider2D other) {
-	    if(other.tag == "Player") {
+	void OnTriggerStay2D (Collider2D other) {
+	    if(other.tag == "Player" && pickupAble) {
+            GameManager.setScore(GameManager.players.player1,(int)points);
             foreach(ItemDatabase.Bonus bonus in bonusList) {
                 BonusUtilities.PerformBonus(bonus);
             }
@@ -54,13 +58,26 @@ public class Item : MonoBehaviour {
             Destroy(gameObject);
         }
 	}
+
+    public IEnumerator UnpickAbleCoroutine(float time) {
+        print("unpickable coroutine started");
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.color -= new Color(0,0,0, 0.6f);
+
+        yield return new WaitForSeconds(time);
+
+        sr.color += new Color(0, 0, 0, 0.6f);
+
+        pickupAble = true;
+
+        print("unpickable coroutine ended");
+    }
 }
 
 //Deze class hieronder moet alleen worden gebruikt en uitgevoerd als de unity editor wordt gebruikt
 //Zonder deze check kan het project niet worden gebuild en gerund.
 
 #if UNITY_EDITOR 
-
 [CustomEditor(typeof(Item))]
 public class ItemEditor : Editor
 {
@@ -81,6 +98,10 @@ public class ItemEditor : Editor
         oldItemIndex = itemComp.itemIndex;
 
         DrawDefaultInspector();
+
+        if (GUI.changed) {
+            EditorUtility.SetDirty(itemComp); //sla de waardes op
+        }
     }
 
     int GetIDBHighestIndex(Item itemComp) //IDB = Item database

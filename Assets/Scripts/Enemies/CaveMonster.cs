@@ -1,7 +1,18 @@
 ﻿using UnityEngine;
 using CustomLibrary.Collisions;
 
+//De unity editor library moet alleen worden geïmporteerd als de unity editor wordt gebruikt
+//Zonder deze check kan het project niet worden gebuild en gerund.
+
+#if UNITY_EDITOR  
+using UnityEditor;
+#endif
+
 public class CaveMonster : MonoBehaviour {
+
+    [HideInInspector] public ItemDatabase database;
+    [HideInInspector] public GameObject itemPrefab;
+    [HideInInspector] public int itemIndex = -1;
 
     public float speed = 5;
     public float jumpSpeed = 5;
@@ -51,6 +62,8 @@ public class CaveMonster : MonoBehaviour {
             Collider2D otherColl = enemy.GetComponent<Collider2D>();
             Physics2D.IgnoreCollision(coll, otherColl);
         }
+
+        print("itemIndex = "+itemIndex);
     }
 
     void Update() {
@@ -129,6 +142,60 @@ public class CaveMonster : MonoBehaviour {
         timePassed = 0;
     }
 
-
+    public void Kill(bool dropItem) {
+        print("Enemy killed");
+        if (dropItem && database != null && itemIndex != -1) {
+            GameObject item = Instantiate(itemPrefab, transform.position, Quaternion.identity) as GameObject;
+            Item itemComp = item.GetComponent<Item>();
+            itemComp.itemIndex = itemIndex;
+            itemComp.pickupAble = false;
+            itemComp.StartCoroutine(itemComp.UnpickAbleCoroutine(1));
+        }
+        Destroy(gameObject);
+    }
 }
 
+
+
+//Deze class hieronder moet alleen worden gebruikt en uitgevoerd als de unity editor wordt gebruikt
+//Zonder deze check kan het project niet worden gebuild en gerund.
+
+#if UNITY_EDITOR 
+
+[CustomEditor(typeof(CaveMonster))]
+public class CaveMonsterEditor : Editor {
+
+    public override void OnInspectorGUI() {
+        CaveMonster monsterComp = (CaveMonster)target; //target haalt de component die in de editor wordt bewerkt. (Dus de Item component)
+
+        monsterComp.database = EditorGUILayout.ObjectField("Item Database", monsterComp.database,typeof(ItemDatabase),false) as ItemDatabase;
+
+        if (monsterComp.database != null) {
+            if (monsterComp.itemIndex != -1) {
+                if (monsterComp.itemIndex > GetIDBHighestIndex(monsterComp)) {
+                    monsterComp.itemIndex = GetIDBHighestIndex(monsterComp);
+                }
+                EditorGUILayout.LabelField(monsterComp.database.items[monsterComp.itemIndex].name, EditorStyles.boldLabel);  
+            }
+            monsterComp.itemPrefab = EditorGUILayout.ObjectField("Item Prefab", monsterComp.itemPrefab, typeof(GameObject), false) as GameObject;
+            monsterComp.itemIndex = EditorGUILayout.IntSlider("Item Index", monsterComp.itemIndex, -1, GetIDBHighestIndex(monsterComp));
+        }
+
+        
+        DrawDefaultInspector();
+
+        if (GUI.changed) {
+            EditorUtility.SetDirty(monsterComp); //sla de waardes op
+        }
+    }
+
+    int GetIDBHighestIndex(CaveMonster monsterComp) //IDB = Item database
+    {
+        if(monsterComp.database == null) {
+            return 100;
+        }
+        return monsterComp.database.items.Length - 1;
+    }
+}
+
+#endif

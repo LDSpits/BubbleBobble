@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 30494c4946362fd4a894f96f0234e478
-timeCreated: 1474211520
+timeCreated: 1474230104
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -77,7 +77,7 @@ TextureImporter:
     21300140: Spritesheet_BB_objects_70
     21300142: Spritesheet_BB_objects_71
     21300144: Spritesheet_BB_objects_72
-    21300146: Spritesheet_BB_objects_73
+    21300146: Fire_1
     21300148: Spritesheet_BB_objects_74
     21300150: Spritesheet_BB_objects_75
     21300152: Spritesheet_BB_objects_76
@@ -970,9 +970,9 @@ TextureImporter:
     21301926: Spritesheet_BB_objects_963
     21301928: Spritesheet_BB_objects_964
     21301930: Spritesheet_BB_objects_965
-    21301932: Spritesheet_BB_objects_966
-    21301934: Spritesheet_BB_objects_967
-    21301936: Spritesheet_BB_objects_968
+    21301932: Fire_Full_3
+    21301934: Fire_Full_2
+    21301936: Fire_Full_1
     21301938: Spritesheet_BB_objects_969
     21301940: Spritesheet_BB_objects_970
     21301942: Spritesheet_BB_objects_971
@@ -997,11 +997,11 @@ TextureImporter:
     21301980: Spritesheet_BB_objects_990
     21301982: Spritesheet_BB_objects_991
     21301984: Spritesheet_BB_objects_992
-    21301986: Spritesheet_BB_objects_993
-    21301988: Spritesheet_BB_objects_994
-    21301990: Spritesheet_BB_objects_995
-    21301992: Spritesheet_BB_objects_996
-    21301994: Spritesheet_BB_objects_997
+    21301986: Fire_6
+    21301988: Fire_5
+    21301990: Fire_4
+    21301992: Fire_3
+    21301994: Fire_2
     21301996: Spritesheet_BB_objects_998
     21301998: Spritesheet_BB_objects_999
     21302000: Spritesheet_BB_objects_1000
@@ -13956,7 +13956,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_966
+      name: Fire_Full_3
       rect:
         serializedVersion: 2
         x: 13
@@ -13969,26 +13969,26 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_967
+      name: Fire_Full_2
       rect:
         serializedVersion: 2
         x: 30
         y: 571
         width: 8
-        height: 11
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_968
+      name: Fire_Full_1
       rect:
         serializedVersion: 2
         x: 48
         y: 571
         width: 8
-        height: 10
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -14307,65 +14307,65 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_993
+      name: Fire_6
       rect:
         serializedVersion: 2
         x: 63
         y: 571
         width: 8
-        height: 8
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_994
+      name: Fire_5
       rect:
         serializedVersion: 2
         x: 75
         y: 571
         width: 8
-        height: 7
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_995
+      name: Fire_4
       rect:
         serializedVersion: 2
         x: 87
         y: 571
         width: 8
-        height: 6
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_996
+      name: Fire_3
       rect:
         serializedVersion: 2
         x: 99
         y: 571
         width: 8
-        height: 5
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Spritesheet_BB_objects_997
+      name: Fire_2
       rect:
         serializedVersion: 2
         x: 112
         y: 571
-        width: 17
-        height: 4
+        width: 7
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -20268,6 +20268,19 @@ TextureImporter:
         y: 1645
         width: 16
         height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Fire_1
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 571
+        width: 5
+        height: 12
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
