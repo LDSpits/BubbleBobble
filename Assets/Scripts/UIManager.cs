@@ -153,10 +153,10 @@ public class UIManager : MonoBehaviour {
         pause_guide.SetActive(true);
     }
     public void Restart() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        LevelManager.RestartLevel();
     }
     public void Quit() {
-        Application.Quit();
+        LevelManager.Quit();
     }
 
     //----------

@@ -3,24 +3,36 @@ using System.Collections;
 
 public static class InputManager {
 
-	public static bool Right
+    public static bool Right(Players.player player)
     {
-        get { return Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow); }
+        if(Players.player1 == player)
+            return Input.GetKey(KeyCode.D);
+
+        return Input.GetKey(KeyCode.RightArrow);
     }
 
-    public static bool Left
+    public static bool Left(Players.player player)
     {
-        get { return Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow); }
+        if (Players.player1 == player)
+            return Input.GetKey(KeyCode.A);
+
+        return Input.GetKey(KeyCode.LeftArrow);
     }
 
-    public static bool Jump
+    public static bool Jump(Players.player player)
     {
-        get { return Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow); }
+        if (Players.player1 == player)
+            return Input.GetKey(KeyCode.W);
+
+        return Input.GetKey(KeyCode.UpArrow);
     }
 
-    public static bool Action
+    public static bool Action(Players.player player)
     {
-        get { return Input.GetKeyDown(KeyCode.Space); }
+        if (Players.player1 == player)
+            return Input.GetKey(KeyCode.Space);
+
+        return Input.GetKey(KeyCode.RightControl);
     }
 
 }

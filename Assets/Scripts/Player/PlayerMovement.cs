@@ -20,16 +20,17 @@ public class PlayerMovement : MonoBehaviour {
     private bool onGround = false;
     private bool isDead = false;
 
+    [SerializeField]
+    private Players.player thisPlayer;
+
     // Use this for initialization
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-
-        GoodCollisions.CheckSide(this, Vector2.left);
-
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
     }
 
     // Update is called once per frame
@@ -39,11 +40,11 @@ public class PlayerMovement : MonoBehaviour {
 
         if (!isDead && !UIManager.isPaused) {
             //naar links bewegen
-            if (InputManager.Left && !InputManager.Right) {
+            if (InputManager.Left(thisPlayer) && !InputManager.Right(thisPlayer)) {
                 Move(Vector2.left);
             }
             //Naar rechts bewegen
-            if (InputManager.Right && !InputManager.Left) {
+            if (InputManager.Right(thisPlayer) && !InputManager.Left(thisPlayer)) {
                 Move(Vector2.right);
             }
 
@@ -51,13 +52,13 @@ public class PlayerMovement : MonoBehaviour {
             onGround = GoodCollisions.CheckSide(this, Vector2.down, "Solid");
 
             //Springen
-            if (InputManager.Jump && onGround) {
+            if (InputManager.Jump(thisPlayer) && onGround) {
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 AudioManager.PlaySound(AudioManager.Sounds.Jump);
             }
 
             //schieten van de bubbel
-            if (InputManager.Action) {
+            if (InputManager.Action(thisPlayer)) {
                 bubblePrefab.GetComponent<Bubble>().direction = lastDirection;
                 Instantiate(bubblePrefab);
             }
@@ -99,7 +100,7 @@ public class PlayerMovement : MonoBehaviour {
         AudioManager.PlaySound(AudioManager.Sounds.Death);
         isDead = true;
         animator.SetBool("isDead", true);
-        GameManager.DecreaseLife(GameManager.players.player1);
+        GameManager.DecreaseLife(Players.player1);
         bc.enabled = false;
         seconds = 0;
         rb.Sleep();
@@ -129,5 +130,19 @@ public class PlayerMovement : MonoBehaviour {
 
         }
     }
+
+}
+
+public static class Players
+{
+
+    public enum player
+    {
+        player1,
+        player2
+    }
+
+    public const player player1 = player.player1;
+    public const player player2 = player.player2;
 
 }

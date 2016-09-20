@@ -28,11 +28,11 @@ public class TutorialManager : MonoBehaviour {
 	}
 
     void Update() {
-        if (currentMission == 0 && InputManager.Left || InputManager.Right) { //Missie: Bewegen
+        if (currentMission == 0 && InputManager.Left(Players.player1) || InputManager.Right(Players.player1)) { //Missie: Bewegen
             CompleteMission(0);
         }
 
-        if (currentMission <= 1 && InputManager.Jump) { //Missie: Springen
+        if (currentMission <= 1 && InputManager.Jump(Players.player1)) { //Missie: Springen
             CompleteMission(0); //< Voor het geval dat de speler eerst springt
             CompleteMission(1);
         }

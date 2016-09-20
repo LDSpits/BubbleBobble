@@ -5,6 +5,9 @@ public class GameManager : MonoBehaviour {
 
     private static GameManager instance = null;
 
+    private int enemies = 0;
+    private float seconds;
+
     [SerializeField]
     private int p1Lives = 5;
 
@@ -28,18 +31,27 @@ public class GameManager : MonoBehaviour {
         highScore = PlayerPrefs.GetInt("HighScore");
         UIManager.UpdateHighscore(highScore);
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if (p1Lives <= 0)
-        {
-            UIManager.SetUIGameOverState = true;
-        }
-	}
 
-    public static void setScore(players player, int amount)
+   void Update()
     {
-        if (player == players.player1)
+        enemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+        if(enemies == 0)
+        {
+            seconds += Time.deltaTime;
+            if(seconds > 10)
+            {
+                LevelManager.NextLevel();
+                seconds = 0;
+            }
+                
+            
+        }
+    }
+
+    public static void setScore(Players.player player, int amount)
+    {
+        if (player == Players.player1)
         {
             print(instance.p1Score);
             instance.p1Score += amount;
@@ -49,7 +61,6 @@ public class GameManager : MonoBehaviour {
             {
                 UIManager.UpdateHighscore(instance.p1Score);
                 PlayerPrefs.SetInt("HighScore", instance.p1Score);
-                PlayerPrefs.Save();
             }
         }else
         {
@@ -60,15 +71,16 @@ public class GameManager : MonoBehaviour {
             {
                 UIManager.UpdateHighscore(instance.p2Score);
                 PlayerPrefs.SetInt("HighScore", instance.highScore);
-                PlayerPrefs.Save();
             }
         }
 
+        
+
     }
 
-    public static void DecreaseLife(players player)
+    public static void DecreaseLife(Players.player player)
     {
-        if(player == players.player1)
+        if(player == Players.player1)
         {
             instance.p1Lives -= 1;
             UIManager.SetLivesP1(instance.p1Lives);
@@ -77,12 +89,13 @@ public class GameManager : MonoBehaviour {
             instance.p2Lives -= 1;
             UIManager.SetLivesP2(instance.p2Lives);
         }
-    }
 
-    public enum players
-    {
-        player1,
-        player2
+        if (instance.p1Lives <= 0)
+        {
+            UIManager.SetUIGameOverState = true;
+        }
     }
 
 }
+
+
