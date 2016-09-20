@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour {
     void Start () {
         instance = this;
         AudioManager.PlayBackgroundMusic();
-        highScore = PlayerPrefs.GetInt("highScore");
+        highScore = PlayerPrefs.GetInt("HighScore");
+        UIManager.UpdateHighscore(highScore);
     }
 	
 	// Update is called once per frame
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour {
             if(instance.p1Score > instance.highScore)
             {
                 UIManager.UpdateHighscore(instance.p1Score);
-                PlayerPrefs.SetInt("p1Highscore", instance.p1Score);
+                PlayerPrefs.SetInt("HighScore", instance.p1Score);
                 PlayerPrefs.Save();
             }
         }else
@@ -58,7 +59,7 @@ public class GameManager : MonoBehaviour {
             if(instance.p2Score > instance.highScore)
             {
                 UIManager.UpdateHighscore(instance.p2Score);
-                PlayerPrefs.SetInt("highScore", instance.highScore);
+                PlayerPrefs.SetInt("HighScore", instance.highScore);
                 PlayerPrefs.Save();
             }
         }
