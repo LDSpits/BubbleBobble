@@ -68,8 +68,8 @@ public class CaveMonster : MonoBehaviour {
             GameObject item = Instantiate(itemPrefab, transform.position, Quaternion.identity) as GameObject;
             Item itemComp = item.GetComponent<Item>();
             itemComp.itemIndex = itemIndex;
-            itemComp.pickupAble = false;
-            itemComp.StartCoroutine(itemComp.UnpickAbleCoroutine(1));
+            //itemComp.pickupAble = false;
+            //itemComp.StartCoroutine(itemComp.UnpickAbleCoroutine(1));
         }
 
     }

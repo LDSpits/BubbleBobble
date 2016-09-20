@@ -39,12 +39,6 @@ public class Item : MonoBehaviour {
             {
                 transform.parent = parentObject.transform;
             }
-            //onderstaande code onschadelijk gemaakt omdat er 2 gameobjecten in de scene wordt geplaatst in plaats van 1
-            /*else
-            {
-                parentObject = Instantiate(new GameObject("Items"),Vector3.zero,Quaternion.identity) as GameObject;
-                transform.parent = parentObject.transform;
-            }*/
         }
     }
 
@@ -59,19 +53,19 @@ public class Item : MonoBehaviour {
         }
 	}
 
-    public IEnumerator UnpickAbleCoroutine(float time) {
-        print("unpickable coroutine started");
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.color -= new Color(0,0,0, 0.6f);
+    //public IEnumerator UnpickAbleCoroutine(float time) {
+    //    print("unpickable coroutine started");
+    //    SpriteRenderer sr = GetComponent<SpriteRenderer>();
+    //    sr.color -= new Color(0,0,0, 0.6f);
 
-        yield return new WaitForSeconds(time);
+    //    yield return new WaitForSeconds(time);
 
-        sr.color += new Color(0, 0, 0, 0.6f);
+    //    sr.color += new Color(0, 0, 0, 0.6f);
 
-        pickupAble = true;
+    //    pickupAble = true;
 
-        print("unpickable coroutine ended");
-    }
+    //    print("unpickable coroutine ended");
+    //}
 }
 
 //Deze class hieronder moet alleen worden gebruikt en uitgevoerd als de unity editor wordt gebruikt
