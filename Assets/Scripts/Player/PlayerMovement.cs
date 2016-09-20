@@ -3,6 +3,8 @@ using CustomLibrary.Collisions;
 
 public class PlayerMovement : MonoBehaviour {
 
+    public Vector2 respawn;
+
     public float moveSpeed = 5;
     public float jumpSpeed = 5;
     public GameObject bubblePrefab;
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour {
             }
 
             //Controleren of we op de grond staan
-            onGround = GoodCollisions.CheckSide(this, Vector2.down);
+            onGround = GoodCollisions.CheckSide(this, Vector2.down, "Solid");
 
             //Springen
             if (InputManager.Jump && onGround) {
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour {
             if (seconds > 2 ) {
                 isDead = false;
                 animator.SetBool("isDead", false);
-                transform.position = new Vector2(3, 1);
+                transform.position = respawn;
                 rb.WakeUp();
                 bc.enabled = true;
             }
@@ -92,7 +94,8 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-    private void Die() {
+    private void Die()
+    {
         AudioManager.PlaySound(AudioManager.Sounds.Death);
         isDead = true;
         animator.SetBool("isDead", true);
@@ -102,20 +105,28 @@ public class PlayerMovement : MonoBehaviour {
         rb.Sleep();
     }
 
-    void OnCollisionEnter2D(Collision2D coll) {
+    void OnCollisionEnter2D(Collision2D coll)
+    {
 
-        if (coll.collider.CompareTag("Enemy")) {
+        if (coll.collider.CompareTag("Enemy"))
+        { //Het cavemonster zit niet in een bubbel, uh oh...
+            Die();
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (coll.CompareTag("Enemy"))
+        {
             //Verkrijg het cavemonster
-            CaveMonster caveMonster = coll.collider.GetComponent(typeof(CaveMonster)) as CaveMonster;
+            CaveMonster caveMonster = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
 
-            if (caveMonster.IsCaptured) { //Het cavemonster zit in een bubbel, vernietig hem!
-                caveMonster.Kill(true);
-                //Destroy(coll.gameObject);
+            if (caveMonster.IsCaptured)
+            { //Het cavemonster zit in een bubbel, versla hem!
+                caveMonster.Defeat(true);
                 AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
             }
-            else { //Het cavemonster zit niet in een bubbel, uh oh...
-                Die();
-            }
+
         }
     }
 

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+#if UNITY_EDITOR  
+using UnityEditor;
+#endif
+
 public class TutorialCaveMonster : CaveMonster {
 
     //Reference naar tutorialmanager nodig in de editor (public field)
@@ -35,6 +39,7 @@ public class TutorialCaveMonster : CaveMonster {
 
     void OnDestroy() {
         tutorialManager.CompleteMission(3); // Missie: Vernietig de vijand
+        tutorialManager.AutoCompleteMission(4); //Missie: Wacht na de vijand vernietigen
     }
 
 }
