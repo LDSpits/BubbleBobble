@@ -73,9 +73,6 @@ public class GameManager : MonoBehaviour {
                 PlayerPrefs.SetInt("HighScore", instance.highScore);
             }
         }
-
-        
-
     }
 
     public static void DecreaseLife(Players.player player)
