@@ -28,16 +28,16 @@ public class WaterSnake : MonoBehaviour {
         direction = Vector3.down;
 
         waterBlocks.Add(gameObject); //Voeg eerst de 'kop' toe
-        AddWaterBlock();
-        AddWaterBlock();
-        AddWaterBlock();
+        for(int i=0; i<10; i++) {
+            AddWaterBlock();
+        }
     }
 	
 	void Update () {
 
         seconds += Time.deltaTime;
 
-        if(seconds < 0.025f)
+        if(seconds < 0.03f)
         {
             return;
         }
@@ -155,7 +155,8 @@ public class WaterSnake : MonoBehaviour {
             lastSprite = currentSprite;
         }
 
-        waterBlocks[waterBlocks.Count - 1].GetComponent<SpriteRenderer>().sprite = waterHeadStandard;
+        //waterBlocks[waterBlocks.Count - 1].GetComponent<SpriteRenderer>().sprite = waterHeadStandard; //< Laatste deel van de slang sprit
+
 
     }
 
@@ -171,8 +172,6 @@ public class WaterSnake : MonoBehaviour {
     void OnTriggerStay2D(Collider2D coll)
     {
         //Sleur mee
-
-        //coll.transform.position += direction * 0.5f * Time.deltaTime;
     }
 
 

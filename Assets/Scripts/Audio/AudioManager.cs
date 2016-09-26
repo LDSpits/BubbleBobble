@@ -14,10 +14,17 @@ public class AudioManager : MonoBehaviour
     //deze lijst bevat alle AudioSlaves
     private List<AudioSlave> audioSlaves = new List<AudioSlave>();
 
-    void Awake()
-    {
-        instance = this;
-        bgMusic = new AudioSlave(this);
+    void Awake(){
+
+        if (instance) {
+            DestroyImmediate(gameObject);
+        }
+        else {
+            instance = this;
+            bgMusic = new AudioSlave(this);
+            DontDestroyOnLoad(this);
+        }
+
     }
 
     void Start()

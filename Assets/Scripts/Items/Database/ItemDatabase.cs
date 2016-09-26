@@ -24,4 +24,8 @@ public class ItemDatabase : ScriptableObject {
         public BonusType bonus_type;
         public float bonus_value;
     }
+
+    public static int GetHighestIndex(ItemDatabase database) {
+        return database.items.Length - 1;
+    }
 }

@@ -22,17 +22,17 @@ public static class InputManager {
     public static bool Jump(Players.player player)
     {
         if (Players.player1 == player)
-            return Input.GetKey(KeyCode.W);
+            return Input.GetKeyDown(KeyCode.W);
 
-        return Input.GetKey(KeyCode.UpArrow);
+        return Input.GetKeyDown(KeyCode.UpArrow);
     }
 
     public static bool Action(Players.player player)
     {
         if (Players.player1 == player)
-            return Input.GetKey(KeyCode.Space);
+            return Input.GetKeyDown(KeyCode.Space);
 
-        return Input.GetKey(KeyCode.RightControl);
+        return Input.GetKeyDown(KeyCode.RightControl);
     }
 
 }

@@ -123,27 +123,39 @@ public class PlayerMovement : MonoBehaviour
     void OnCollisionEnter2D(Collision2D coll)
     {
 
-        if (coll.collider.CompareTag("Enemy"))
-        { //Het cavemonster zit niet in een bubbel, uh oh...
+        if (coll.collider.CompareTag("Enemy")){ //Het cavemonster zit niet in een bubbel, uh oh...
             Die();
         }
     }
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.CompareTag("Enemy"))
-        {
-            //Verkrijg het cavemonster
-            CaveMonster caveMonster = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
+        if (coll.CompareTag("Enemy")) {
 
-            if (caveMonster.IsCaptured)
-            { //Het cavemonster zit in een bubbel, versla hem!
-                caveMonster.Defeat(true);
+            Enemy enemy = coll.GetComponent<Enemy>();
+            if (enemy) {
+                enemy.Defeat();
                 AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
             }
 
+            //Verkrijg het cavemonster
+            CaveMonster caveMonster = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
+
+            if (caveMonster.IsCaptured) { //Het cavemonster zit in een bubbel, versla hem!
+                caveMonster.Defeat(true);
+                AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
+            }
+        }
+
+
+    }
+
+    void OnTriggerStay2D(Collider2D coll) {
+        if (coll.CompareTag("WaterFX")) {
+            transform.Translate(coll.transform.up * Time.deltaTime);
         }
     }
+
 }
 
 public static class Players

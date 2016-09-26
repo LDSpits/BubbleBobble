@@ -19,9 +19,16 @@ public class GameManager : MonoBehaviour {
 
     private int highScore; 
 
-    void Awake()
-    {
-        DontDestroyOnLoad(this);
+    void Awake(){
+
+        if (instance) {
+            DestroyImmediate(gameObject);
+        }
+        else {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+
     }
 
     // Use this for initialization
@@ -39,7 +46,7 @@ public class GameManager : MonoBehaviour {
         if(enemies == 0)
         {
             seconds += Time.deltaTime;
-            if(seconds > 10)
+            if(seconds > 5)
             {
                 LevelManager.NextLevel();
                 seconds = 0;

@@ -68,8 +68,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Audio\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Enemies\CaveMonster.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Monsta.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Pulpul.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Items\BonusUtilities.cs" />
+    <Compile Include="Assets\Scripts\Items\Database\EnemyDatabase.cs" />
     <Compile Include="Assets\Scripts\Items\Database\ItemDatabase.cs" />
     <Compile Include="Assets\Scripts\Items\Item.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />

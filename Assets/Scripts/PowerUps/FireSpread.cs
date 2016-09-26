@@ -1,63 +1,94 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using CustomLibrary.Collisions;
 
 public class FireSpread : MonoBehaviour {
 
 
     private GameObject flame;
-    private float speed;
+    private float speed = 0.5f;
 
-    // Use this for initialization
-    private void Start () {
-        SpawnFlames();
-    }
+    public List<GameObject> fireSlaves = new List<GameObject>();
+    public GameObject fireSlave;
+
+    private bool didFallThrough = false;
+    private bool reachedFloor = false;
+    private bool hasFilledFloor = false;
+
+    private int lengthLeft = 0, lengthRight = 0;
+    private int currentIndex = 0;
+    private float seconds = 0;
+
 	
 	// Update is called once per frame
 	private void Update () {
 
 	    //Val naar beneden
-        if (GoodCollisions.CheckSide(this, Vector2.down, "Solid")){
+        if (!GoodCollisions.CheckSide(this, Vector2.down, speed, "Solid")){
             transform.Translate(Vector3.down * speed * Time.deltaTime);
+        }else {
+            if (!reachedFloor) {
+                CalculateLength();
+                reachedFloor = true;
+            }else {
+                seconds += Time.deltaTime;
+                if (!hasFilledFloor && seconds > 0.1) {
+                    SpawnFlames();
+                    seconds = 0;
+                }
+            }
         }
-
-
 
 	}
 
-    private void SpawnFlames()
+    private void CalculateLength()
     {
         Vector3 currentPos = transform.position;
-        float lengthLeft = 0, lengthRight = 0;
 
         bool leftFree = false, rightFree = false;
 
 
-        int i = 1;
-        do
-        {
+        int i = 0;
+        do{
             print("Slag : " + i++);
             //op het moment dat er aan de linkerkant grond is verlengen we links
-            if (!leftFree && GoodCollisions.CheckSide(currentPos + (Vector3.left * i), this, Vector2.down, "Solid"))
-            {
+            if (!leftFree && CheckCollisions(transform.position, Vector3.left, i)) {
                 lengthLeft++;
             }
-            else leftFree = true;
+            else { leftFree = true; }
+
 
             //op het moment dat er aan de rechterkant grond is verlengen we rechts
-            if (!rightFree && GoodCollisions.CheckSide(currentPos + (Vector3.right * i), this, Vector2.down, "Solid"))
-            {
+            if (!rightFree && CheckCollisions(transform.position, Vector3.right, i)) {
                 lengthRight++;
             }
-            else rightFree = true;
+            else { rightFree = true; }
         }
-        while (!leftFree && !rightFree);
+        while (!leftFree || !rightFree);
 
-        print(i * lengthLeft + lengthRight);
+        //Verander in een fireslave
+        Destroy(gameObject, 5);
+        GetComponent<Animator>().runtimeAnimatorController = fireSlave.GetComponent<Animator>().runtimeAnimatorController;
 
-
+        print(string.Format("LengthLeft: {0}, LengthRight: {1}", lengthLeft, lengthRight));
         print(string.Format("LeftFree: {0}, RightFree: {1}", leftFree, rightFree));
 
+    }
+
+    private bool CheckCollisions(Vector3 origin, Vector3 direction, int i) {
+        return (GoodCollisions.CheckSide(origin + (direction *(i + 0.01f)), this, Vector2.down, "Solid") && !GoodCollisions.CheckSide(origin + (direction * (i - 0.06f)), this, direction, "Solid")) ;
+    }
+
+    private void SpawnFlames() {
+
+        if (currentIndex <= lengthLeft)
+            Destroy(Instantiate(fireSlave, transform.position + Vector3.left * currentIndex, Quaternion.identity, transform.parent), 5);
+
+        if (currentIndex <= lengthRight)
+            Destroy(Instantiate(fireSlave, transform.position + Vector3.right * currentIndex, Quaternion.identity, transform.parent), 5);
+
+        currentIndex += 1;
 
     }
 
