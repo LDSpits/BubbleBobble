@@ -7,7 +7,7 @@ public class FireSpread : MonoBehaviour {
 
 
     private GameObject flame;
-    private float speed = 0.5f;
+    private float speed = 1f;
 
     public List<GameObject> fireSlaves = new List<GameObject>();
     public GameObject fireSlave;

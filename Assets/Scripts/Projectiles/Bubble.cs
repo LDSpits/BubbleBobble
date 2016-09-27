@@ -51,6 +51,15 @@ public class Bubble : MonoBehaviour {
     {
         if (coll.CompareTag("Enemy") && speed != 0)
         {
+            Enemy enemy = coll.GetComponent(typeof(Enemy)) as Enemy;
+            if (enemy)
+            {
+                enemy.Capture(); //'Capture' de vijand, zet de vijand in bubbelmodus.
+                Destroy(gameObject);
+                return;
+            }
+
+            
             //Verkrijg het cavemonster script van de enemy
             CaveMonster caveMonsterScript = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
 

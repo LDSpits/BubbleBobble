@@ -6,8 +6,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 respawn;
 
-
-
     public float moveSpeed = 5;
     public float jumpSpeed = 5;
     public GameObject bubblePrefab;
@@ -136,6 +134,7 @@ public class PlayerMovement : MonoBehaviour
             if (enemy) {
                 enemy.Defeat();
                 AudioManager.PlaySound(AudioManager.Sounds.BubbleCapture);
+                return;
             }
 
             //Verkrijg het cavemonster
