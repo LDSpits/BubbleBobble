@@ -3,33 +3,33 @@ using System.Collections;
 
 public static class InputManager {
 
-    public static bool Right(Players.player player)
+    public static bool Right(PlayerID player)
     {
-        if(Players.player1 == player)
+        if(PlayerID.player1 == player)
             return Input.GetKey(KeyCode.D);
 
         return Input.GetKey(KeyCode.RightArrow);
     }
 
-    public static bool Left(Players.player player)
+    public static bool Left(PlayerID player)
     {
-        if (Players.player1 == player)
+        if (PlayerID.player1 == player)
             return Input.GetKey(KeyCode.A);
 
         return Input.GetKey(KeyCode.LeftArrow);
     }
 
-    public static bool Jump(Players.player player)
+    public static bool Jump(PlayerID player)
     {
-        if (Players.player1 == player)
+        if (PlayerID.player1 == player)
             return Input.GetKeyDown(KeyCode.W);
 
         return Input.GetKeyDown(KeyCode.UpArrow);
     }
 
-    public static bool Action(Players.player player)
+    public static bool Action(PlayerID player)
     {
-        if (Players.player1 == player)
+        if (PlayerID.player1 == player)
             return Input.GetKeyDown(KeyCode.Space);
 
         return Input.GetKeyDown(KeyCode.RightControl);

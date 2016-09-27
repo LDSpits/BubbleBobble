@@ -7,7 +7,7 @@ public class FireSpread : MonoBehaviour {
 
 
     private GameObject flame;
-    private float speed = 1f;
+    private float speed = 3f;
 
     public List<GameObject> fireSlaves = new List<GameObject>();
     public GameObject fireSlave;
@@ -17,18 +17,24 @@ public class FireSpread : MonoBehaviour {
     private bool hasFilledFloor = false;
 
     private int lengthLeft = 0, lengthRight = 0;
-    private int currentIndex = 0;
+    private int currentIndex = 1;
     private float seconds = 0;
+
+    private void Start(){
+        //transform.position = new Vector3(Mathf.Floor(transform.position.x) + 0.5f, transform.position.y, transform.position.z);
+    }
 
 	
 	// Update is called once per frame
 	private void Update () {
 
 	    //Val naar beneden
-        if (!GoodCollisions.CheckSide(this, Vector2.down, speed, "Solid")){
+        if (!GoodCollisions.CheckSide(this, Vector2.down, GetComponent<BoxCollider2D>().size.y/2, "Solid")){
             transform.Translate(Vector3.down * speed * Time.deltaTime);
         }else {
             if (!reachedFloor) {
+                //Rond de positie af op een heel getal
+                transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, transform.position.z);
                 CalculateLength();
                 reachedFloor = true;
             }else {
@@ -89,7 +95,6 @@ public class FireSpread : MonoBehaviour {
             Destroy(Instantiate(fireSlave, transform.position + Vector3.right * currentIndex, Quaternion.identity, transform.parent), 5);
 
         currentIndex += 1;
-
     }
 
 

@@ -1,25 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
     private static GameManager instance = null;
 
+    private readonly float RESPAWN_TIME = 3;
+    private readonly float INVINCIBLITY_TIME = 3;
+
+    private List<PlayerData> playerDataList = new List<PlayerData>(4);
+
     private int enemies = 0;
     private float seconds;
 
-    [SerializeField]
-    private int p1Lives = 5;
-
-    [SerializeField]
-    private int p2Lives = 5;
-
-    private int p1Score = 0;
-    private int p2Score = 0;
-
     private int highScore; 
 
-    void Awake(){
+    private void Awake(){
 
         if (instance) {
             DestroyImmediate(gameObject);
@@ -31,15 +29,27 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    // Use this for initialization
-    void Start () {
+    private void Start()
+    {
         instance = this;
         AudioManager.PlayBackgroundMusic();
         highScore = PlayerPrefs.GetInt("HighScore");
         UIManager.UpdateHighscore(highScore);
+        SceneManager.sceneLoaded += OnLoadScene;
+    }
+    //Als een level wordt geladen
+    private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
+    {
+        //Update de levens en score
+        foreach(PlayerData data in playerDataList) {
+            UIManager.UpdateScore(data.ID, data.Score);
+            UIManager.UpdateLives(data.ID, data.Lives);
+        }
+
+        UIManager.UpdateHighscore(instance.highScore);
     }
 
-   void Update()
+    private void Update()
     {
         enemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
@@ -48,58 +58,116 @@ public class GameManager : MonoBehaviour {
             seconds += Time.deltaTime;
             if(seconds > 5)
             {
-                LevelManager.NextLevel();
                 seconds = 0;
-            }
-                
+                NextLevel();
+            }  
+        }
+    }
+
+    public static void AddScore(PlayerID id, int amount)
+    {
+        instance.playerDataList[(int)id].Score += amount;
+
+        int newScore = instance.playerDataList[(int)id].Score;
+        UIManager.UpdateScore(id, newScore);
+
+        //Als de score hoger is dan de highscore, vernieuwen we de highscore & UI
+        if (newScore > instance.highScore) {
+            instance.highScore = newScore;
+            UIManager.UpdateHighscore(newScore);
+        }
+    }
+
+    public static void DecreaseLife(PlayerID id)
+    {
+        //Maak de speler dood
+        PlayerData p = instance.playerDataList[(int)id];
+        p.Player.Die();
+        UIManager.UpdateLives(id, --p.Lives);
+
+        //Controleer of er spelers met levens over zijn
+        int totalLives = 0;
+        foreach (PlayerData data in instance.playerDataList) {
+            totalLives += data.Lives;
+        }
+
+        if (p.Lives > 0) //De speler heeft levens over, respawn hem
+            instance.StartCoroutine(instance.RespawnRoutine(p.Player));
+
+        if (totalLives <= 0) {
+            UIManager.SetUIState(UIState.GameOver); 
+        }
             
-        }
     }
 
-    public static void setScore(Players.player player, int amount)
+    IEnumerator RespawnRoutine(Player playerComp)
     {
-        if (player == Players.player1)
-        {
-            print(instance.p1Score);
-            instance.p1Score += amount;
-            UIManager.UpdateScoreP1(instance.p1Score);
-
-            if(instance.p1Score > instance.highScore)
-            {
-                UIManager.UpdateHighscore(instance.p1Score);
-                PlayerPrefs.SetInt("HighScore", instance.p1Score);
-            }
-        }else
-        {
-            instance.p2Score += amount;
-            UIManager.UpdateScoreP2(instance.p2Score);
-
-            if(instance.p2Score > instance.highScore)
-            {
-                UIManager.UpdateHighscore(instance.p2Score);
-                PlayerPrefs.SetInt("HighScore", instance.highScore);
-            }
-        }
+        //TODO: check of de level gewisseld is
+        yield return new WaitForSeconds(RESPAWN_TIME);
+        playerComp.Respawn();
+        yield return new WaitForSeconds(INVINCIBLITY_TIME);
+        playerComp.Mortalize();
     }
 
-    public static void DecreaseLife(Players.player player)
+    public static PlayerID RegisterPlayer(Player player)
     {
-        if(player == Players.player1)
-        {
-            instance.p1Lives -= 1;
-            UIManager.SetLivesP1(instance.p1Lives);
-        }else
-        {
-            instance.p2Lives -= 1;
-            UIManager.SetLivesP2(instance.p2Lives);
+        PlayerID id = (PlayerID)instance.playerDataList.Count;
+        instance.playerDataList.Add(new PlayerData(id, player));
+        return id;
+    }
+
+    public static void NextLevel()
+    {
+        PlayerPrefs.Save();
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public static void Quit()
+    {
+        PlayerPrefs.Save();
+        Application.Quit();
+    }
+
+    public static void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    internal class PlayerData
+    {
+        private Player _player;
+        private int _lives = 5;
+        private int _score = 0;
+
+        private PlayerID id = PlayerID.player1;
+
+        public Player Player {
+            get { return _player; }
+            set { _player = value; }
         }
 
-        if (instance.p1Lives <= 0)
+        public int Lives
         {
-            UIManager.SetUIGameOverState = true;
+            get{ return _lives; }
+            set { _lives = value; }
+        }
+
+        public int Score
+        {
+            get { return _score; }
+            set { _score = value; }
+        }
+
+        public PlayerID ID {
+            get { return id; }
+            set { id = value; }
+        }
+
+        public PlayerData(PlayerID id, Player player)
+        {
+            this.id = id;
+            Player = player;
         }
     }
 
 }
-
-

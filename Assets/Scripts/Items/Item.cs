@@ -44,7 +44,7 @@ public class Item : MonoBehaviour {
 
 	void OnTriggerStay2D (Collider2D other) {
 	    if(other.tag == "Player" && pickupAble) {
-            GameManager.setScore(Players.player1,(int)points);
+            GameManager.AddScore(PlayerID.player1,(int)points);
             foreach(ItemDatabase.Bonus bonus in bonusList) {
                 BonusUtilities.PerformBonus(bonus);
             }

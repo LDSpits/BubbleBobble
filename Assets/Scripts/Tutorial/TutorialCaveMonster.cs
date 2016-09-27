@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEditor;
 #endif
 
-public class TutorialCaveMonster : CaveMonster {
+public class TutorialCaveMonster : Zenchan {
 
     //Reference naar tutorialmanager nodig in de editor (public field)
     public TutorialManager tutorialManager;

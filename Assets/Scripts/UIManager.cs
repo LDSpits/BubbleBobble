@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 public class UIManager : MonoBehaviour {
 
 	private static UIManager instance;
 
     //BubbleLives Velden
-    [SerializeField] private GameObject bubbleLivesP1;
-    [SerializeField] private GameObject bubbleLivesP2;
+    [SerializeField] private GameObject bubbleLivesP1, bubbleLivesP2, bubbleLivesP3, bubbleLivesP4;
 
-    //Text refs
-    [SerializeField] private Text highScoreTitle, highScoreText;
-    [SerializeField] private Text scoreTitleP1, scoreTextP1; //Score P1
-	[SerializeField] private Text scoreTitleP2, scoreTextP2; //Score P2
+    //Tekstvelden
+    [SerializeField] private Text scoreTextP1, scoreTextP2, scoreTextP3, scoreTextP4, highScoreText;
 
     //GameOver
     public GameObject gameOverGO;
@@ -21,13 +18,14 @@ public class UIManager : MonoBehaviour {
     public GameObject pause_panel, pause_main, pause_guide;
 
     private bool pauseMenuIsOn;
-    
-    public void PauseMenuToggle() {
+
+    public void PauseMenuToggle()
+    {
         if (pauseMenuIsOn) {
-            Resume();
+            SetUIState(UIState.None);
         }
         else {
-            OpenPauseMenu();
+            SetUIState(UIState.Pause);
         }
     }
     //----
@@ -37,41 +35,26 @@ public class UIManager : MonoBehaviour {
         get { return instance.pauseMenuIsOn; }
     }
 
-    /* Player 1 */
-    //Lives Player 1 
-    public static void SetLivesP1(int lives) {
-        DisplayLives(instance.bubbleLivesP1, lives);
+    //Update Lives
+    public static void UpdateLives(PlayerID id, int lives)
+    {
+        switch (id) {
+            case PlayerID.player1: DisplayLives(instance.bubbleLivesP1, lives); break;
+            case PlayerID.player2: DisplayLives(instance.bubbleLivesP2, lives); break;
+            case PlayerID.player3: DisplayLives(instance.bubbleLivesP3, lives); break;
+            case PlayerID.player4: DisplayLives(instance.bubbleLivesP4, lives); break;
+        }
     }
 
-    //Score title Player 1
-    public static string ScoreTitleP1 {
-		set{ instance.scoreTitleP1.text = value; }
-	}
-
-    //Score text Player 1
-    public static void UpdateScoreP1(long score) {
-        instance.scoreTextP1.text = AddZeros(score);
-    }
-
-    /* Player 2 */
-    //Lives Player 12
-    public static void SetLivesP2(int lives) {
-        DisplayLives(instance.bubbleLivesP2, lives);
-    }
-
-    //Score title Player 2
-    public static string ScoreTitleP2 {
-        set { instance.scoreTitleP2.text = value; }
-    }
-
-    //Score text Player 2
-    public static void UpdateScoreP2(long score) {
-        instance.scoreTextP2.text = AddZeros(score);
-    }
-
-    //Highscore Title
-    public static string HighScoreTitle {
-        set { instance.highScoreTitle.text = value; }
+    //Update score
+    public static void UpdateScore(PlayerID id, long score)
+    {
+        switch (id) {
+            case PlayerID.player1: instance.scoreTextP1.text = AddZeros(score);  break;
+            case PlayerID.player2: instance.scoreTextP2.text = AddZeros(score); break;
+            case PlayerID.player3: instance.scoreTextP3.text = AddZeros(score); break;
+            case PlayerID.player4: instance.scoreTextP4.text = AddZeros(score); break;
+        }
     }
 
     //Highscore Text
@@ -79,18 +62,53 @@ public class UIManager : MonoBehaviour {
     {
         instance.highScoreText.text = AddZeros(score);
     }
-    //Game Over tonen
-    public static bool SetUIGameOverState{
-		set{ instance.gameOverGO.SetActive (value); }
-	}
+
+    //GUI State zetten
+
+    public static void SetUIState(UIState state)
+    {
+        switch (state) {
+            case UIState.None:
+                instance.StateHelper(false, false, false);
+                instance.pauseMenuIsOn = false;
+                AudioManager.PlayBackgroundMusic();
+                Time.timeScale = 1;
+                break;
+            case UIState.GameOver:
+                instance.StateHelper(false, false, true);
+                instance.pauseMenuIsOn = false;
+                AudioManager.PauseBackgroundMusic();
+                Time.timeScale = 0;
+                break;
+            case UIState.Pause:
+                instance.StateHelper(true, false, false);
+                instance.pauseMenuIsOn = true;
+                AudioManager.PauseBackgroundMusic();
+                Time.timeScale = 0;
+                break;
+            case UIState.Manual:
+                instance.StateHelper(false, true, false);
+                instance.pauseMenuIsOn = true;
+                AudioManager.PauseBackgroundMusic();
+                Time.timeScale = 0;
+                break;
+        }
+    }
+    
+    private void StateHelper( bool main, bool guide, bool over)
+    {
+        instance.pause_panel.SetActive(main == true || guide == true); 
+        instance.pause_main.SetActive(main);
+        instance.pause_guide.SetActive(guide);
+        instance.gameOverGO.SetActive(over);
+    }
 
     void Awake() {
         instance = this;
     }
 
     void Start() {
-        gameOverGO.SetActive(false);
-        Resume();
+        SetUIState(UIState.None);
     }
 
     void Update() {
@@ -99,8 +117,7 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-    
-    private static void DisplayLives(GameObject bubbleLives, int lives) { //Werkt voor nu alleen nog voor speler 1 !!!!
+    private static void DisplayLives(GameObject bubbleLives, int lives) {
         for(int i=0; i<bubbleLives.transform.childCount; i++) {
             if (i < lives)
                 bubbleLives.transform.GetChild(i).gameObject.SetActive(true); //Bubbel tonen
@@ -122,42 +139,20 @@ public class UIManager : MonoBehaviour {
         return result + scoreAsText;
     }
 
-    
-    //Pauzemenu
-    public void OpenPauseMenu() {
-        print("Pause menu");
-
-        pause_panel.SetActive(true);
-        pause_main.SetActive(true);
-        pause_guide.SetActive(false);
-        pauseMenuIsOn = true;
-        AudioManager.PauseBackgroundMusic();
-        Time.timeScale = 0;
-    }
-
-    public void Resume() {
-        print("Resume");
-
-        pause_panel.SetActive(false);
-        pause_main.SetActive(false);
-        pause_guide.SetActive(false);
-        pauseMenuIsOn = false;
-        AudioManager.PlayBackgroundMusic();
-        Time.timeScale = 1;
-    }
-    public void GoToManual() {
-        print("Manual");
-
-        pause_panel.SetActive(true);
-        pause_main.SetActive(false);
-        pause_guide.SetActive(true);
-    }
     public void Restart() {
-        LevelManager.RestartLevel();
+        GameManager.RestartLevel();
     }
     public void Quit() {
-        LevelManager.Quit();
+        GameManager.Quit();
     }
 
     //----------
+}
+
+public enum UIState
+{
+    Pause,
+    GameOver,
+    Manual,
+    None
 }

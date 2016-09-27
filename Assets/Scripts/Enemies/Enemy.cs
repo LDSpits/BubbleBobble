@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour {
 	//Capture functies
 	//--
 	public void Capture() {
-		this.captured = true;
+		captured = true;
 		rb.isKinematic = true;
 		bc.isTrigger = true; //Collider uitschakelen
 		animator.SetBool("captured", true);

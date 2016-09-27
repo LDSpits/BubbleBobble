@@ -102,7 +102,6 @@ public class Pulpul : Enemy {
 
     void RandomizeMovement() {
         Vector2 randomMovement = GetRandomDirection() * speed * Time.deltaTime;
-        Vector2 randomMovePos = (Vector2)transform.position + randomMovement;
 
         movement = randomMovement;
 

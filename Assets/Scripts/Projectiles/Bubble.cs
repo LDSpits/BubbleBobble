@@ -4,14 +4,11 @@ public class Bubble : MonoBehaviour {
 
     private float speed;
     private Animator animator;
-    
     private float seconds;
-
     public Vector2 direction;
 	
     // Use this for initialization
     void Start () {
-        transform.position = GameObject.Find("Player").transform.position;
         animator = GetComponent<Animator>();
 
         speed = direction.x * 15; //Bubbel lanceer-snelheid
@@ -20,8 +17,7 @@ public class Bubble : MonoBehaviour {
         AudioManager.PlaySound(AudioManager.Sounds.BubbleShot);
 	}
 
-    void Update()
-    {
+    void Update(){
 		seconds += Time.deltaTime;
 
         if (Mathf.Abs(speed) <= 0.4f) { //Als we te langzaam gaan, stop dan af
@@ -47,29 +43,19 @@ public class Bubble : MonoBehaviour {
             
     }
 	
-	void OnTriggerEnter2D(Collider2D coll)
-    {
-        if (coll.CompareTag("Enemy") && speed != 0)
-        {
+	void OnTriggerEnter2D(Collider2D coll){
+        if (coll.CompareTag("Enemy") && speed != 0){
             Enemy enemy = coll.GetComponent(typeof(Enemy)) as Enemy;
-            if (enemy)
-            {
+            if (enemy){
                 enemy.Capture(); //'Capture' de vijand, zet de vijand in bubbelmodus.
                 Destroy(gameObject);
-                return;
             }
-
-            
-            //Verkrijg het cavemonster script van de enemy
-            CaveMonster caveMonsterScript = coll.GetComponent(typeof(CaveMonster)) as CaveMonster;
-
-            caveMonsterScript.Capture(); //'Capture' de vijand, zet de vijand in bubbelmodus.
-
-            Destroy(gameObject);
         }
+
         else if (coll.CompareTag("Player") && speed == 0) { //Speler raakt ons aan, ga direct kapot
             seconds = 0;
             animator.SetInteger("status", 4);
+            GameManager.AddScore(coll.GetComponent<Player>().ThisPlayer, 10); // 10 punten
             Destroy(gameObject, 0.5f);
         }
     }

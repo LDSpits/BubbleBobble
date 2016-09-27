@@ -40,18 +40,13 @@ public class PowerUp : MonoBehaviour {
             active = true;
 
             if (type == 0) //Watereffect
-            {
                 Instantiate(waterEffectPrefab, transform.position, Quaternion.identity);
-            }else if((int)type == 1) //lightning
-            {
-
-            }else if((int)type == 2) //fire
-            {
-
-            }else if((int)type == 3) //fireBall
-            {
-
-            }
+            else if((int)type == 1) //lightning
+                Instantiate(waterEffectPrefab, transform.position, Quaternion.identity);
+            else if((int)type == 2) //fire
+                Instantiate(fireEffectPrefab, transform.position, Quaternion.identity);
+            else if((int)type == 3) //fireBall
+                Instantiate(waterEffectPrefab, transform.position, Quaternion.identity);
 
             Destroy(gameObject);
         }
