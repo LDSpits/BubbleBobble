@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using CustomLibrary.Collisions;
 
 public class Player : MonoBehaviour
 {
+
     public Vector2 respawnLocation;
 
     public float moveSpeed = 5;
     public float jumpSpeed = 5;
     public GameObject bubblePrefab;
+
+    //Alle animaties van de speler die geswapt moeten worden
+    public AnimationClip[] animationClips;
 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -40,6 +45,17 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
+        //Overschrijf alle animaties
+        AnimatorOverrideController overrideController = new AnimatorOverrideController();
+        overrideController.runtimeAnimatorController = animator.runtimeAnimatorController;
+        overrideController["Anim_player_idle"] = animationClips[0];
+        overrideController["Anim_player_moving"] = animationClips[1];
+        overrideController["Anim_player_falling"] = animationClips[2];
+        overrideController["Anim_player_dead"] = animationClips[3];
+        overrideController["Anim_player_shooting"] = animationClips[4];
+        overrideController["Anim_player_shootingfalling"] = animationClips[5];
+        animator.runtimeAnimatorController = overrideController;
     }
 
     // Update is called once per frame
@@ -76,6 +92,7 @@ public class Player : MonoBehaviour
             {
                 bubblePrefab.GetComponent<Bubble>().direction = lastDirection;
                 Instantiate(bubblePrefab,transform.position,Quaternion.identity);
+                animator.SetTrigger("shoot");
             }
         }
 
@@ -112,7 +129,7 @@ public class Player : MonoBehaviour
 
     public void Respawn()
     {
-        spriteRenderer.color = new Color(1, 1, 1, 0.5f); //Maak ons doorzichtig
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f); //Maak ons doorzichtig en onsterfelijk
         print(string.Format("Player {0} has respawned, is unkillable",thisPlayer));
         isDead = false;
         animator.SetBool("isDead", false);

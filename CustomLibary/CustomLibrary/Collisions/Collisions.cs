@@ -18,7 +18,7 @@ namespace CustomLibrary.Collisions
             Vector2 sideOffset = CalcSideOffset(direction);
             float _distance = CalcDistance(sideOffset, gameObject.GetComponent<BoxCollider2D>());
 
-            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance);
+            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance, "");
 
             return hit;
         }
@@ -37,9 +37,9 @@ namespace CustomLibrary.Collisions
             Vector2 sideOffset = CalcSideOffset(direction);
             float _distance = CalcDistance(sideOffset, gameObject.GetComponent<BoxCollider2D>());
 
-            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance);
+            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance, withTag);
 
-            return hit && hit.collider.CompareTag(withTag);
+            return (hit && hit.collider.CompareTag(withTag));
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace CustomLibrary.Collisions
             Vector2 sideOffset = CalcSideOffset(direction);
             float _distance = CalcDistance(sideOffset, gameObject.GetComponent<BoxCollider2D>());
 
-            RaycastHit2D hit = PerformRaycasts(origin, direction, sideOffset, _distance);
+            RaycastHit2D hit = PerformRaycasts(origin, direction, sideOffset, _distance, withTag);
 
-            return hit && hit.collider.CompareTag(withTag);
+            return (hit && hit.collider.CompareTag(withTag));
         }
 
         /// <summary>
@@ -75,12 +75,12 @@ namespace CustomLibrary.Collisions
             Vector2 sideOffset = CalcSideOffset(direction);
             float _distance = distance;
 
-            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance);
+            RaycastHit2D hit = PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance, withTag);
 
-            return hit && hit.collider.CompareTag(withTag);
+            return (hit && hit.collider.CompareTag(withTag));
         }
 
-        private static RaycastHit2D PerformRaycasts(Vector3 origin, Vector2 direction, Vector2 sideoffset, float distance)
+        private static RaycastHit2D PerformRaycasts(Vector3 origin, Vector2 direction, Vector2 sideoffset, float distance, string tag)
         {
             Color drawColor = new Color(0, 1, 0);
 
@@ -90,8 +90,10 @@ namespace CustomLibrary.Collisions
             (hit = Physics2D.Raycast((Vector2)origin + sideoffset * distance, direction, distance + 0.05f )) ||
             (hit = Physics2D.Raycast((Vector2)origin + -sideoffset * distance, direction, distance + 0.05f )));
 
-            if (hitSomething)
-                drawColor = new Color(1, 0, 0); //Rays rood tekenen
+            if (hitSomething) {
+                if (tag == "" || hit.collider.CompareTag(tag))
+                    drawColor = new Color(1, 0, 0); //Rays rood tekenen
+            }
 
             Debug.DrawRay(origin, direction * distance, drawColor);
             Debug.DrawRay((Vector2)origin + (sideoffset * distance), direction * (distance + 0.05f), drawColor);

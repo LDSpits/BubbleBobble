@@ -3852,7 +3852,7 @@ Default is false.</para>
       <summary>
         <para>Unloads all GameObject associated with the given scene. Note that assets are currently not unloaded, in order to free up asset memory call Resources.UnloadAllUnusedAssets.</para>
       </summary>
-      <param name="index">Index of the scene in the PlayerIDettings to unload.</param>
+      <param name="index">Index of the scene in the PlayerSettings to unload.</param>
       <param name="scenePath">Name of the scene to Unload.</param>
       <returns>
         <para>Return true if the scene is unloaded.</para>
@@ -3862,7 +3862,7 @@ Default is false.</para>
       <summary>
         <para>Unloads all GameObject associated with the given scene. Note that assets are currently not unloaded, in order to free up asset memory call Resources.UnloadAllUnusedAssets.</para>
       </summary>
-      <param name="index">Index of the scene in the PlayerIDettings to unload.</param>
+      <param name="index">Index of the scene in the PlayerSettings to unload.</param>
       <param name="scenePath">Name of the scene to Unload.</param>
       <returns>
         <para>Return true if the scene is unloaded.</para>
@@ -19800,9 +19800,9 @@ GUILayout.MaxHeight, GUILayout.ExpandWidth, GUILayout.ExpandHeight.</param>
         <para>A miscellaneous comment (can hold data).</para>
       </summary>
     </member>
-    <member name="P:UnityEngine.HostData.connectedPlayerID">
+    <member name="P:UnityEngine.HostData.connectedPlayers">
       <summary>
-        <para>Currently connected PlayerID.</para>
+        <para>Currently connected players.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.HostData.gameName">
@@ -19832,7 +19832,7 @@ GUILayout.MaxHeight, GUILayout.ExpandWidth, GUILayout.ExpandHeight.</param>
     </member>
     <member name="P:UnityEngine.HostData.playerLimit">
       <summary>
-        <para>Maximum PlayerID limit.</para>
+        <para>Maximum players limit.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.HostData.port">
@@ -27336,7 +27336,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
     </member>
     <member name="P:UnityEngine.Network.connections">
       <summary>
-        <para>All connected PlayerID.</para>
+        <para>All connected players.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Network.connectionTesterIP">
@@ -27376,7 +27376,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
     </member>
     <member name="P:UnityEngine.Network.maxConnections">
       <summary>
-        <para>Set the maximum amount of connections/PlayerID allowed.</para>
+        <para>Set the maximum amount of connections/players allowed.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Network.minimumAllocatableViewIDs">
@@ -27736,7 +27736,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
         <para>We presented an RSA public key which does not match what the system we connected to is using.</para>
       </summary>
     </member>
-    <member name="F:UnityEngine.NetworkConnectionError.TooManyConnectedPlayerID">
+    <member name="F:UnityEngine.NetworkConnectionError.TooManyConnectedPlayers">
       <summary>
         <para>The server is at full capacity, failed to connect.</para>
       </summary>
@@ -28393,7 +28393,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
     </member>
     <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.currentSize">
       <summary>
-        <para>The current number of PlayerID in the match.</para>
+        <para>The current number of players in the match.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.directConnectInfos">
@@ -28418,7 +28418,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
     </member>
     <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.maxSize">
       <summary>
-        <para>The maximum number of PlayerID this match can grow to.</para>
+        <para>The maximum number of players this match can grow to.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.name">
@@ -28527,8 +28527,8 @@ Note that updating a light probe volume every frame may be costly. The cost depe
       </summary>
       <param name="netId">The NetworkID of the match to join. This is found through calling NetworkMatch.ListMatches and picking a result from the returned list of matches.</param>
       <param name="matchPassword">The password of the match. Leave empty if there is no password for the match, and supply the text string password if the match was configured to have one of the NetworkMatch.CreateMatch request.</param>
-      <param name="publicClientAddress">The optional public client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your PlayerID to be able to connect directly with each other over the internet. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
-      <param name="privateClientAddress">The optional private client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your PlayerID to be able to connect directly with each other over a Local Area Network. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
+      <param name="publicClientAddress">The optional public client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your players to be able to connect directly with each other over the internet. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
+      <param name="privateClientAddress">The optional private client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your players to be able to connect directly with each other over a Local Area Network. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
       <param name="eloScoreForClient">The Elo score for the client joining the match being created. If this number is set on all clients to indicate relative skill level, this number is used to return matches ordered by those that are most suitable for play given a listing player's skill level. This may be 0 on all clients, which would disable any Elo calculations in the MatchMaker.</param>
       <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
       <param name="callback">The callback to be invoked when this call completes.</param>
@@ -28867,7 +28867,7 @@ Note that updating a light probe volume every frame may be costly. The cost depe
     <member name="M:UnityEngine.Networking.NetworkTransport.AddWebsocketHost(UnityEngine.Networking.HostTopology,System.Int32)">
       <summary>
         <para>Created web socket host. 
-This function is supported only for Editor (Win, Linux, Mac) and StandalonePlayerID (Win, Linux, Mac) 
+This function is supported only for Editor (Win, Linux, Mac) and StandalonePlayers (Win, Linux, Mac) 
 Topology is used to define how many client can connect, and how many messages should be preallocated in send and receive pool, all other parameters are ignored.</para>
       </summary>
       <param name="port">Listening tcp port.</param>
@@ -29917,14 +29917,14 @@ If a string, the string will be converted to raw bytes via &lt;a href="http:msdn
     </member>
     <member name="?:UnityEngine.NetworkPlayer.op_Equal(UnityEngine.NetworkPlayer,UnityEngine.NetworkPlayer)">
       <summary>
-        <para>Returns true if two NetworkPlayerID are the same player.</para>
+        <para>Returns true if two NetworkPlayers are the same player.</para>
       </summary>
       <param name="lhs"></param>
       <param name="rhs"></param>
     </member>
     <member name="?:UnityEngine.NetworkPlayer.op_NotEqual(UnityEngine.NetworkPlayer,UnityEngine.NetworkPlayer)">
       <summary>
-        <para>Returns true if two NetworkPlayerID are not the same player.</para>
+        <para>Returns true if two NetworkPlayers are not the same player.</para>
       </summary>
       <param name="lhs"></param>
       <param name="rhs"></param>
@@ -34866,7 +34866,7 @@ The block is specified by its x,y offset in the texture and by its width and hei
     </member>
     <member name="P:UnityEngine.Profiler.enableBinaryLog">
       <summary>
-        <para>Sets profiler output file in built PlayerID.</para>
+        <para>Sets profiler output file in built players.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Profiler.enabled">
@@ -34876,7 +34876,7 @@ The block is specified by its x,y offset in the texture and by its width and hei
     </member>
     <member name="P:UnityEngine.Profiler.logFile">
       <summary>
-        <para>Sets profiler output file in built PlayerID.</para>
+        <para>Sets profiler output file in built players.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Profiler.maxNumberOfSamplesPerFrame">
@@ -38323,7 +38323,7 @@ Updating a probe's cubemap is a costly operation. Unity needs to render the enti
         <para>Forward Rendering.</para>
       </summary>
     </member>
-    <member name="F:UnityEngine.RenderingPath.UsePlayerIDettings">
+    <member name="F:UnityEngine.RenderingPath.UsePlayerSettings">
       <summary>
         <para>Use Player Settings.</para>
       </summary>
@@ -41420,7 +41420,7 @@ It is required that the GameObject is at the root of its current scene.</para>
     </member>
     <member name="?:UnityEngine.SocialPlatforms.ILeaderboard">
       <summary>
-        <para>The leaderboard contains the scores of all PlayerID for a particular game.</para>
+        <para>The leaderboard contains the scores of all players for a particular game.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.SocialPlatforms.ILeaderboard.id">
@@ -43146,7 +43146,7 @@ Returns NULL if there is no associated alpha texture for the source sprite. This
         <para>Height of the alpha map.</para>
       </summary>
     </member>
-    <member name="P:UnityEngine.TerrainData.alphamaPlayerID">
+    <member name="P:UnityEngine.TerrainData.alphamapLayers">
       <summary>
         <para>Number of alpha map layers.</para>
       </summary>
@@ -47775,7 +47775,7 @@ The GrammarRecognizer uses Extensible Markup Language (XML) elements and attribu
     </member>
     <member name="T:UnityEngine.WSA.Launcher">
       <summary>
-        <para>Class which is capable of launching user's default app for file type or a protocol. See also PlayerIDettings where you can specify file or URI associations.</para>
+        <para>Class which is capable of launching user's default app for file type or a protocol. See also PlayerSettings where you can specify file or URI associations.</para>
       </summary>
     </member>
     <member name="M:UnityEngine.WSA.Launcher.LaunchFile(UnityEngine.WSA.Folder,System.String,System.Boolean)">
