@@ -28,7 +28,7 @@ namespace CustomLibrary.Collisions
         /// <param name="direction">De richting waarin we controleren of er iets is</param>
         /// <param name="withTag">Welk tag het obstakel moet hebben, dit mogen er meerdere zijn</param>
         /// <returns>Of er iets in de weg staat (true) of niet (false)</returns>
-        public static bool CheckSide(Component thisComponent, Vector2 direction, string[] withTag)
+        public static bool CheckSide(Component thisComponent, Vector2 direction, params string[] withTag)
         {
             GameObject gameObject = thisComponent.gameObject;
 
@@ -45,7 +45,7 @@ namespace CustomLibrary.Collisions
         /// <param name="direction">De richting waarin we controleren of er iets is</param>
         /// <param name="withTag">Welk tag het obstakel moet hebben</param>
         /// <returns>Of er iets in de weg staat (true) of niet (false)</returns>
-        public static bool CheckSide(Vector3 origin,Component thisComponent, Vector2 direction, string[] withTag)
+        public static bool CheckSide(Vector3 origin,Component thisComponent, Vector2 direction, params string[] withTag)
         {
             GameObject gameObject = thisComponent.gameObject;
 
@@ -62,7 +62,7 @@ namespace CustomLibrary.Collisions
         /// <param name="direction">De richting waarin we controleren of er iets is</param>
         /// <param name="withTag">Welk tag het obstakel moet hebben</param>
         /// <returns>Of er iets in de weg staat (true) of niet (false)</returns>
-        public static bool CheckSide(Component thisComponent, Vector2 direction,float distance, string[] withTag)
+        public static bool CheckSide(Component thisComponent, Vector2 direction,float distance, params string[] withTag)
         {
             GameObject gameObject = thisComponent.gameObject;
 
@@ -72,7 +72,7 @@ namespace CustomLibrary.Collisions
             return PerformRaycasts(gameObject.transform.position, direction, sideOffset, _distance, withTag);
         }
 
-        private static bool PerformRaycasts(Vector3 origin, Vector2 direction, Vector2 sideoffset, float distance, string[] tags)
+        private static bool PerformRaycasts(Vector3 origin, Vector2 direction, Vector2 sideoffset, float distance, params string[] tags)
         {
             Color drawColor = new Color(0, 1, 0);
 
