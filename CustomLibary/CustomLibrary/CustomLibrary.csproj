@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collisions\Collisions.cs" />
-    <Compile Include="EnemyAI\EnemyAI.cs" />
+    <Compile Include="Timers\CustomTimer.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
